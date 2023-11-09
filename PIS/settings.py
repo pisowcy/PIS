@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import django
 from django.utils.encoding import smart_str
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 django.utils.encoding.smart_text = smart_str
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^w1e-p$0*r!an4u_au8r6@t7)2(!i1&)^a1n-v$^1e=etxn#tc'
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['137.116.206.131']
+ALLOWED_HOSTS = ['137.116.206.131', '10.1.1.4', '127.0.0.1']
 
 
 # Application definition
@@ -81,11 +85,11 @@ WSGI_APPLICATION = 'PIS.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'pis-project', 
-        'USER': 'pisadmin',
-        'PASSWORD': 'dbhaslo123#',
-        'HOST': 'pis-db1.postgres.database.azure.com', 
-        'PORT': '5432',
+        'NAME': env("DB_NAME"), 
+        'USER': env("DB_USER"),
+        'PASSWORD': env("DB_PASSWD"),
+        'HOST': env("DB_HOST"), 
+        'PORT': env("DB_PORT"),
     }
 }
 

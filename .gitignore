@@ -2,3 +2,9 @@ env
 PIS/Website/__pycache__
 PIS/PIS/__pycache__
 
+PIS/.env
+.coverage
+Website/__pycache__/tests.cpython-312.pyc
+Website/__pycache__/urls.cpython-312.pyc
+Website/__pycache__/tests.cpython-312.pyc
+Website/__pycache__/views.cpython-312.pyc
