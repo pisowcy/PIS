@@ -92,7 +92,11 @@ DATABASES = {
         'PORT': env("DB_PORT"),
     }
 }
-
+JENKINS_TASKS = ( 
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.run_pylint',
+)
+PROJECT_APPS = ['Website']
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
