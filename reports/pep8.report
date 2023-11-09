@@ -1,0 +1,8 @@
+Website\admin.py:4:29: W292 no newline at end of file
+Website\models.py:3:1: E302 expected 2 blank lines, found 1
+Website\tests.py:15:38: W292 no newline at end of file
+Website\urls.py:10:2: W292 no newline at end of file
+Website\views.py:11:1: E302 expected 2 blank lines, found 1
+Website\views.py:14:22: E225 missing whitespace around operator
+Website\views.py:28:1: E302 expected 2 blank lines, found 1
+Website\views.py:32:1: W391 blank line at end of file

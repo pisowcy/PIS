@@ -1,0 +1,41 @@
+************* Module C:\Users\rafal\Desktop\PIS\.pylintrc
+.pylintrc:1: [W0012(unknown-option-value), ] Unknown option value for '--disable', expected a valid pylint message and got 'disable=I0011'
+************* Module Website
+Website\__init__.py:1: [C0103(invalid-name), ] Module name "Website" doesn't conform to snake_case naming style
+************* Module Website.admin
+Website\admin.py:4: [C0304(missing-final-newline), ] Final newline missing
+Website\admin.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+************* Module Website.apps
+Website\apps.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+Website\apps.py:4: [C0115(missing-class-docstring), WebsiteConfig] Missing class docstring
+************* Module Website.models
+Website\models.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+Website\models.py:3: [C0115(missing-class-docstring), Teacher] Missing class docstring
+************* Module Website.tests
+Website\tests.py:15: [C0304(missing-final-newline), ] Final newline missing
+Website\tests.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+Website\tests.py:5: [C0115(missing-class-docstring), AnimalTestCase] Missing class docstring
+Website\tests.py:7: [E1101(no-member), AnimalTestCase.setUp] Class 'Teacher' has no 'objects' member
+Website\tests.py:8: [E1101(no-member), AnimalTestCase.setUp] Class 'Teacher' has no 'objects' member
+Website\tests.py:12: [E1101(no-member), AnimalTestCase.test_animals_can_speak] Class 'Teacher' has no 'objects' member
+Website\tests.py:13: [E1101(no-member), AnimalTestCase.test_animals_can_speak] Class 'Teacher' has no 'objects' member
+************* Module Website.urls
+Website\urls.py:10: [C0304(missing-final-newline), ] Final newline missing
+Website\urls.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+Website\urls.py:3: [C0411(wrong-import-order), ] third party import "from django.conf import settings" should be placed before "from . import views"
+Website\urls.py:4: [C0411(wrong-import-order), ] third party import "from django.conf.urls.static import static" should be placed before "from . import views"
+Website\urls.py:3: [W0611(unused-import), ] Unused settings imported from django.conf
+Website\urls.py:4: [W0611(unused-import), ] Unused static imported from django.conf.urls.static
+************* Module Website.views
+Website\views.py:32: [C0305(trailing-newlines), ] Trailing newlines
+Website\views.py:1: [C0114(missing-module-docstring), ] Missing module docstring
+Website\views.py:4: [W0404(reimported), ] Reimport 'render' (imported line 1)
+Website\views.py:8: [C0116(missing-function-docstring), home] Missing function or method docstring
+Website\views.py:11: [C0116(missing-function-docstring), login_user] Missing function or method docstring
+Website\views.py:18: [R1705(no-else-return), login_user] Unnecessary "else" after "return", remove the "else" and de-indent the code inside it
+Website\views.py:28: [C0116(missing-function-docstring), logout_user] Missing function or method docstring
+Website\views.py:4: [W0611(unused-import), ] Unused get_object_or_404 imported from django.shortcuts
+
+------------------------------------------------------------------
+Your code has been rated at 1.37/10 (previous run: 1.37/10, +0.00)
+
