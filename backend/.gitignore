@@ -1,7 +1,6 @@
 env
 PIS/Website/__pycache__
 PIS/PIS/__pycache__
-PIS/settings.py
 
 PIS/.env
 .coverage
