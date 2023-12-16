@@ -150,7 +150,7 @@ if not env('DEV') == 'true':
     STATIC_LOCATION = "static"
     MEDIA_LOCATION = "media"
 
-    AZURE_ACCOUNT_NAME = "pisstorage2"
-    AZURE_CUSTOM_DOMAIN = f'pisstorage2.blob.core.windows.net'
+    AZURE_ACCOUNT_NAME = env('STORAGE_NAME')
+    AZURE_CUSTOM_DOMAIN = f'{AZURE_ACCOUNT_NAME}.blob.core.windows.net'
     STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
     MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
