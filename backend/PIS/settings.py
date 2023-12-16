@@ -33,7 +33,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ['137.116.206.131', '10.1.1.4', '127.0.0.1']
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -141,3 +141,15 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if not env('DEV') == 'true':
+    DEFAULT_FILE_STORAGE = 'backend.custom_azure.AzureMediaStorage'
+    STATICFILES_STORAGE = 'backend.custom_azure.AzureStaticStorage'
+
+    STATIC_LOCATION = "static"
+    MEDIA_LOCATION = "media"
+
+    AZURE_ACCOUNT_NAME = "pisstorage2"
+    AZURE_CUSTOM_DOMAIN = f'pisstorage2.blob.core.windows.net'
+    STATIC_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+    MEDIA_URL = f'https://{AZURE_CUSTOM_DOMAIN}/{MEDIA_LOCATION}/'
