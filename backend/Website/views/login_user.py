@@ -1,12 +1,7 @@
-from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 
-
-# Create your views here.
-def home(request):
-    return render(request, 'home.html', {})
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -29,4 +24,3 @@ def logout_user(request):
     logout(request)
     messages.success(request, "Wylogowano pomyślnie")
     return redirect('home')
-
