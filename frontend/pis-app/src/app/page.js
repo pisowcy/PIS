@@ -3,7 +3,7 @@ import { HomePage } from "@/components/home-page"
 
 export default function Page() {
   return (
-    <div>
+    <div data-testid="home-page">
       <HomePage />
     </div>
   )
