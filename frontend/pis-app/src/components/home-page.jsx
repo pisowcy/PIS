@@ -99,7 +99,7 @@ function MovieCards() {
 
       for (let id of ids) {
         try {
-          const response = await fetch(`http://137.116.206.131/productions/${id}`);
+          const response = await fetch(`http://20.229.152.181/productions/${id}`);
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
