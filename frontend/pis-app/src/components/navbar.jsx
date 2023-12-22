@@ -11,10 +11,10 @@ export function Navbar() {
         <div className="flex items-center justify-end gap-4">
           <nav className="flex gap-4">
             <Link className="text-sm font-medium text-gray-700 hover:underline" href="/ra">
-              Ranking
+              Top Movies
             </Link>
             <Link className="text-sm font-medium text-gray-700 hover:underline" href="/sign-up">
-              Zarejestruj się
+              Sign Up
             </Link>
           </nav>
           <Link href="/sign-in">
