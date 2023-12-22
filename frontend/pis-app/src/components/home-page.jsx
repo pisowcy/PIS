@@ -1,32 +1,11 @@
 "use client";
 import React, { useEffect, useState } from 'react';
-import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { CardHeader, CardContent, Card } from "@/components/ui/card"
 
 export function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="py-4 px-6 bg-white shadow">
-        <div className="flex items-center justify-between">
-          <Link href="#">
-            <span className="text-xl font-bold text-black">Cinemania</span>
-          </Link>
-          <div className="flex items-center justify-end gap-4">
-            <nav className="flex gap-4">
-              <Link className="text-sm font-medium text-gray-700 hover:underline" href="#">
-                Ranking
-              </Link>
-              <Link className="text-sm font-medium text-gray-700 hover:underline" href="#">
-                Zarejestruj się
-              </Link>
-            </nav>
-            <Link href="#">
-              <UserIcon className="w-4 h-4 text-gray-500" />
-            </Link>
-          </div>
-        </div>
-      </header>
       <main className="flex-1">
         <section className="relative w-full h-96">
           <img
@@ -42,10 +21,10 @@ export function HomePage() {
           />
           <div className="absolute top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white">Cinemania - wszystkie filmy w jednym miejscu</h1>
-              <p className="text-lg text-white mt-2">Sprawdzaj i oceniaj swoje ulubione filmy</p>
+              <h1 className="text-4xl font-bold text-white">Cinemania - all your movies in one place</h1>
+              <p className="text-lg text-white mt-2">Explore and rate your favourite productions</p>
               <div className="mt-4">
-                <input className="w-64 py-2 px-4 rounded-md text-black" placeholder="Wyszukaj tytuł filmu" type="text" />
+                <input className="w-64 py-2 px-4 rounded-md text-black" placeholder="Search for a movie" type="text" />
               </div>
             </div>
           </div>
@@ -133,26 +112,5 @@ function MovieCards() {
         ))}
       </div>
     </section>
-  );
-}
-
-
-
-function UserIcon(props) {
-  return (
-    (<svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" />
-    </svg>)
   );
 }
