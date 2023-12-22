@@ -7,26 +7,6 @@ import { CardHeader, CardContent, Card } from "@/components/ui/card"
 export function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <header className="py-4 px-6 bg-white shadow">
-        <div className="flex items-center justify-between">
-          <Link href="#">
-            <span className="text-xl font-bold text-black">Cinemania</span>
-          </Link>
-          <div className="flex items-center justify-end gap-4">
-            <nav className="flex gap-4">
-              <Link className="text-sm font-medium text-gray-700 hover:underline" href="#">
-                Ranking
-              </Link>
-              <Link className="text-sm font-medium text-gray-700 hover:underline" href="#">
-                Zarejestruj się
-              </Link>
-            </nav>
-            <Link href="#">
-              <UserIcon className="w-4 h-4 text-gray-500" />
-            </Link>
-          </div>
-        </div>
-      </header>
       <main className="flex-1">
         <section className="relative w-full h-96">
           <img
