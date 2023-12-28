@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import { Badge } from "@/components/ui/badge"
 import { CardHeader, CardContent, Card } from "@/components/ui/card"
+import { Navbar } from "@/components/navbar"
 
-export function HomePage() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100" data-testid="home-page">
+      <Navbar />
       <main className="flex-1">
         <section className="relative w-full h-96">
           <img
