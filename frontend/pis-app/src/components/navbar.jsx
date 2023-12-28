@@ -10,7 +10,7 @@ export function Navbar() {
         </Link>
         <div className="flex items-center justify-end gap-4">
           <nav className="flex gap-4">
-            <Link className="text-sm font-medium text-gray-700 hover:underline" href="/ra">
+            <Link className="text-sm font-medium text-gray-700 hover:underline" href="/movie-ranking">
               Top Movies
             </Link>
             <Link className="text-sm font-medium text-gray-700 hover:underline" href="/sign-up">
