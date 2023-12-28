@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -65,17 +66,20 @@ function Movie({ title, description }) {
         <Badge className="text-black">8.4</Badge>
       </CardHeader>
       <CardContent>
-        <img
-          alt="Movie poster"
-          className="w-full h-64 object-cover"
-          height="200"
-          src="https://th.bing.com/th/id/OIP.VoUvM9GU4u_ZQIEU5629TgHaK-?rs=1&pid=ImgDetMain"
-          style={{
-            aspectRatio: "200/200",
-            objectFit: "cover",
-          }}
-          width="200"
-        />
+        <Link href={"/movie-page"}>
+          {/* <Link href={`/movie-page /${id}`} passHref> */}
+          <img
+            alt="Movie poster"
+            className="w-full h-64 object-cover"
+            height="200"
+            src="https://th.bing.com/th/id/OIP.VoUvM9GU4u_ZQIEU5629TgHaK-?rs=1&pid=ImgDetMain"
+            style={{
+              aspectRatio: "200/200",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
+        </Link>
         <p className="mt-4 text-black">{description}</p>
       </CardContent>
     </Card>

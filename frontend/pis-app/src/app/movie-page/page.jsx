@@ -9,7 +9,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 export default function MoviePage() {
-  const [rating, setRating] = React.useState(2);
+  const [rating, setRating] = React.useState(0);
 
   return (
     <main className="container mx-auto">
@@ -29,12 +29,12 @@ export default function MoviePage() {
               width="420"
             />
             <div className="mt-2 flex items-center">
-              <StarIcon className="w-4 h-4 mr-2" />
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
                 Average Rating: 4.5
               </p>
+              <StarIcon className="w-4 h-4 ml-2" />
             </div>
-            <div className="mt-2 mb-4 flex items-center">
+            <div className="mt-2 mb-2 flex items-center">
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
                 Number of Ratings: 1200
               </p>
@@ -48,9 +48,9 @@ export default function MoviePage() {
               }}
             />
           </div>
-          <div className="p-8">
+          <div>
             <CardHeader>
-              <Badge className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+              <Badge className="inline-flex items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                 Adventure
               </Badge>
 
@@ -68,44 +68,20 @@ export default function MoviePage() {
                 the only ones searching for the treasure, and they must outwit
                 dangerous rivals who want the treasure for evil purposes.
               </p>
-            </CardContent>
-            <div className="mt-6 flex items-center">
-              <div className="flex-shrink-0">
-                <Avatar className="h-10 w-10 rounded-full">
-                  <img
-                    alt="Creator's Avatar"
-                    className="h-full w-full object-cover rounded-full"
-                    height="100"
-                    src="/placeholder.svg"
-                    style={{
-                      aspectRatio: "100/100",
-                      objectFit: "cover",
-                    }}
-                    width="100"
-                  />
-                </Avatar>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm leading-5 font-medium text-gray-900 dark:text-white">
-                  John Doe
-                </p>
-                <div className="flex text-sm leading-5 text-gray-500 dark:text-gray-300">
-                  <span>Director</span>
+              <div className="mt-10">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                  Director and Cast
+                </h3>
+                <div className="mt-2">
+                  <ul>
+                    <li>Director: John Doe</li>
+                    <li>Actor 1 as Character 1</li>
+                    <li>Actor 2 as Character 2</li>
+                    <li>Actor 3 as Character 3</li>
+                  </ul>
                 </div>
               </div>
-            </div>
-            <div className="mt-6">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                Cast
-              </h3>
-              <div className="mt-2">
-                <ul>
-                  <li>Actor 1 as Character 1</li>
-                  <li>Actor 2 as Character 2</li>
-                  <li>Actor 3 as Character 3</li>
-                </ul>
-              </div>
-            </div>
+            </CardContent>
           </div>
         </div>
       </Card>
