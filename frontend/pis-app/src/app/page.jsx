@@ -1,12 +1,15 @@
 "use client";
-import React, { useEffect, useState } from 'react';
-import { Badge } from "@/components/ui/badge"
-import { CardHeader, CardContent, Card } from "@/components/ui/card"
-import { Navbar } from "@/components/navbar"
+import React, { useEffect, useState } from "react";
+import { Badge } from "@/components/ui/badge";
+import { CardHeader, CardContent, Card } from "@/components/ui/card";
+import { Navbar } from "@/components/navbar";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100" data-testid="home-page">
+    <div
+      className="flex flex-col min-h-screen bg-gray-100"
+      data-testid="home-page"
+    >
       <Navbar />
       <main className="flex-1">
         <section className="relative w-full h-96">
@@ -23,10 +26,18 @@ export default function HomePage() {
           />
           <div className="absolute top-0 left-0 w-full h-full bg-black/40 flex items-center justify-center">
             <div className="text-center">
-              <h1 className="text-4xl font-bold text-white">Cinemania - all your movies in one place</h1>
-              <p className="text-lg text-white mt-2">Explore and rate your favourite productions</p>
+              <h1 className="text-4xl font-bold text-white">
+                Cinemania - all your movies in one place
+              </h1>
+              <p className="text-lg text-white mt-2">
+                Explore and rate your favourite productions
+              </p>
               <div className="mt-4">
-                <input className="w-64 py-2 px-4 rounded-md text-black" placeholder="Search for a movie" type="text" />
+                <input
+                  className="w-64 py-2 px-4 rounded-md text-black"
+                  placeholder="Search for a movie"
+                  type="text"
+                />
               </div>
             </div>
           </div>
@@ -35,16 +46,17 @@ export default function HomePage() {
       </main>
       <footer className="py-4 px-6 bg-white shadow-t">
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">© Cinemania. Projekt na przedmiot PIS.</p>
-          <nav className="flex gap-4">
-          </nav>
+          <p className="text-sm text-gray-500">
+            © Cinemania. Projekt na przedmiot PIS.
+          </p>
+          <nav className="flex gap-4"></nav>
         </div>
       </footer>
     </div>
-  )
+  );
 }
 
-function Movie({title, description}) {
+function Movie({ title, description }) {
   return (
     // <div>
     <Card>
@@ -62,12 +74,13 @@ function Movie({title, description}) {
             aspectRatio: "200/200",
             objectFit: "cover",
           }}
-          width="200" />
+          width="200"
+        />
         <p className="mt-4 text-black">{description}</p>
       </CardContent>
     </Card>
-  // </div>
-  )
+    // </div>
+  );
 }
 
 function MovieCards() {
@@ -80,14 +93,16 @@ function MovieCards() {
 
       for (let id of ids) {
         try {
-          const response = await fetch(`http://20.229.152.181/productions/${id}`);
+          const response = await fetch(
+            `http://20.229.152.181/productions/${id}`
+          );
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
           const data = await response.json();
           moviesData.push(data);
         } catch (error) {
-          console.error('Error fetching data:', error);
+          console.error("Error fetching data:", error);
         }
       }
       setMovies(moviesData);
@@ -98,9 +113,9 @@ function MovieCards() {
 
   function generateUniqueRandomIds(min, max, num) {
     let ids = [];
-    while(ids.length < num) {
+    while (ids.length < num) {
       let id = Math.floor(Math.random() * (max - min + 1) + min);
-      if(ids.indexOf(id) === -1) ids.push(id);
+      if (ids.indexOf(id) === -1) ids.push(id);
     }
     return ids;
   }
@@ -109,8 +124,12 @@ function MovieCards() {
     <section className="px-6 py-12">
       <h2 className="text-2xl font-bold text-black mb-6">Trending Movies</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        {movies.map(movie => (
-          <Movie key={movie.id} title={movie.title} description={movie.description} />
+        {movies.map((movie) => (
+          <Movie
+            key={movie.id}
+            title={movie.title}
+            description={movie.description}
+          />
         ))}
       </div>
     </section>

@@ -1,10 +1,10 @@
-import { CardHeader, CardContent, Card } from "@/components/ui/card"
-import { Navbar } from "@/components/navbar"
-import Link from "next/link"
+import { CardHeader, CardContent, Card } from "@/components/ui/card";
+import { Navbar } from "@/components/navbar";
+import Link from "next/link";
 
 export default function MovieRanking() {
   return (
-    (<main className="mx-auto px-4 md:px-6 max-w-7xl grid gap-12 flex justify-center">
+    <main className="mx-auto px-4 md:px-6 max-w-7xl grid gap-12 flex justify-center">
       <Navbar />
       <Card className="w-full">
         <CardHeader>
@@ -12,7 +12,7 @@ export default function MovieRanking() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-6">
-            <Link href="#">
+            <Link href="/movie-page">
               <div className="flex gap-4">
                 <div className="font-bold text-2xl">1</div>
                 <img
@@ -24,13 +24,17 @@ export default function MovieRanking() {
                     aspectRatio: "140/200",
                     objectFit: "cover",
                   }}
-                  width="140" />
+                  width="140"
+                />
                 <div className="flex flex-col gap-2 text-sm flex-grow">
                   <h3 className="font-semibold text-lg">Movie 1</h3>
                   <p className="text-gray-500 dark:text-gray-400 line-clamp-2">
-                    This is a brief description of the Movie 1. It is a thrilling and captivating film.
+                    This is a brief description of the Movie 1. It is a
+                    thrilling and captivating film.
                   </p>
-                  <p className="text-gray-500 dark:text-gray-400">Genre: Action</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Genre: Action
+                  </p>
                   <p className="text-gray-500 dark:text-gray-400">Year: 2023</p>
                 </div>
                 <div className="self-start ml-auto text-lg">
@@ -39,7 +43,7 @@ export default function MovieRanking() {
                 </div>
               </div>
             </Link>
-            <Link href="#">
+            <Link href="/movie-page">
               <div className="flex gap-4">
                 <div className="font-bold text-2xl">2</div>
                 <img
@@ -51,13 +55,17 @@ export default function MovieRanking() {
                     aspectRatio: "140/200",
                     objectFit: "cover",
                   }}
-                  width="140" />
+                  width="140"
+                />
                 <div className="flex flex-col gap-2 text-sm flex-grow">
                   <h3 className="font-semibold text-lg">Movie 2</h3>
                   <p className="text-gray-500 dark:text-gray-400 line-clamp-2">
-                    This is a brief description of the Movie 2. It is a thrilling and captivating film.
+                    This is a brief description of the Movie 2. It is a
+                    thrilling and captivating film.
                   </p>
-                  <p className="text-gray-500 dark:text-gray-400">Genre: Drama</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Genre: Drama
+                  </p>
                   <p className="text-gray-500 dark:text-gray-400">Year: 2022</p>
                 </div>
                 <div className="self-start ml-auto text-lg">
@@ -66,7 +74,7 @@ export default function MovieRanking() {
                 </div>
               </div>
             </Link>
-            <Link href="#">
+            <Link href="/movie-page">
               <div className="flex gap-4">
                 <div className="font-bold text-2xl">3</div>
                 <img
@@ -78,13 +86,17 @@ export default function MovieRanking() {
                     aspectRatio: "140/200",
                     objectFit: "cover",
                   }}
-                  width="140" />
+                  width="140"
+                />
                 <div className="flex flex-col gap-2 text-sm flex-grow">
                   <h3 className="font-semibold text-lg">Movie 3</h3>
                   <p className="text-gray-500 dark:text-gray-400 line-clamp-2">
-                    This is a brief description of the Movie 3. It is a thrilling and captivating film.
+                    This is a brief description of the Movie 3. It is a
+                    thrilling and captivating film.
                   </p>
-                  <p className="text-gray-500 dark:text-gray-400">Genre: Sci-Fi</p>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    Genre: Sci-Fi
+                  </p>
                   <p className="text-gray-500 dark:text-gray-400">Year: 2021</p>
                 </div>
                 <div className="self-start ml-auto text-lg">
@@ -96,14 +108,13 @@ export default function MovieRanking() {
           </div>
         </CardContent>
       </Card>
-    </main>)
+    </main>
   );
 }
 
-
 function StarIcon(props) {
   return (
-    (<svg
+    <svg
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       width="24"
@@ -113,9 +124,9 @@ function StarIcon(props) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
-      <polygon
-        points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>)
+      strokeLinejoin="round"
+    >
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+    </svg>
   );
 }
