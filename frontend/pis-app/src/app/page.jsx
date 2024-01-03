@@ -59,31 +59,28 @@ export default function HomePage() {
 
 function Movie({ title, description }) {
   return (
-    // <div>
     <Card>
-      <CardHeader>
-        <h3 className="text-lg font-bold text-black">{title}</h3>
-        <Badge className="text-black">8.4</Badge>
-      </CardHeader>
-      <CardContent>
-        <Link href={"/movie-page"}>
-          {/* <Link href={`/movie-page /${id}`} passHref> */}
-          <img
-            alt="Movie poster"
-            className="w-full h-64 object-cover"
-            height="200"
-            src="https://th.bing.com/th/id/OIP.VoUvM9GU4u_ZQIEU5629TgHaK-?rs=1&pid=ImgDetMain"
-            style={{
-              aspectRatio: "200/200",
-              objectFit: "cover",
-            }}
-            width="200"
-          />
-        </Link>
-        <p className="mt-4 text-black">{description}</p>
-      </CardContent>
+      <Link href={"/movie-page"}>
+        <CardHeader>
+          <h3 className="text-lg font-bold text-black">{title}</h3>
+          <Badge className="text-black">8.4</Badge>
+        </CardHeader>
+        <CardContent>
+            <img
+              alt="Movie poster"
+              className="w-full h-64 object-cover"
+              height="200"
+              src="https://th.bing.com/th/id/OIP.VoUvM9GU4u_ZQIEU5629TgHaK-?rs=1&pid=ImgDetMain"
+              style={{
+                aspectRatio: "200/200",
+                objectFit: "cover",
+              }}
+              width="200"
+            />
+          <p className="mt-4 text-black">{description}</p>
+        </CardContent>
+      </Link>
     </Card>
-    // </div>
   );
 }
 

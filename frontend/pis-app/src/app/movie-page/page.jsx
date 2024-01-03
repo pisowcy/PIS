@@ -32,7 +32,7 @@ export default function MoviePage() {
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
                 Average Rating: 4.5
               </p>
-              <StarIcon className="w-4 h-4 ml-2" />
+              <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
             </div>
             <div className="mt-2 mb-2 flex items-center">
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
@@ -72,7 +72,7 @@ export default function MoviePage() {
                 <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
                   Director and Cast
                 </h3>
-                <div className="mt-2">
+                <div className="mt-2 dark:text-white">
                   <ul>
                     <li>Director: John Doe</li>
                     <li>Actor 1 as Character 1</li>
