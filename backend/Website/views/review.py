@@ -14,3 +14,11 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
+
+
+class ReviewByProduction(generics.ListCreateAPIView):
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self):
+        production_id = self.kwargs.get('id')
+        return Review.objects.filter(production_id=production_id)
