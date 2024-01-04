@@ -57,10 +57,10 @@ export default function HomePage() {
   );
 }
 
-function Movie({ title, description }) {
+function Movie({ id, title, description }) {
   return (
     <Card>
-      <Link href={"/movie-page"}>
+      <Link href={`/movie-page/${id}`}>
         <CardHeader>
           <h3 className="text-lg font-bold text-black">{title}</h3>
           <Badge className="text-black">8.4</Badge>
@@ -128,6 +128,7 @@ function MovieCards() {
         {movies.map((movie) => (
           <Movie
             key={movie.id}
+            id={movie.id}
             title={movie.title}
             description={movie.description}
           />
