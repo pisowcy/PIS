@@ -87,6 +87,7 @@ function Ranking() {
           var year = date.getFullYear()
           return <Movie 
             key={movie.id}
+            id={movie.id}
             description={movie.description}
             title={movie.title}
             genre={movie.genre}
@@ -107,8 +108,9 @@ function Movie(props) {
   const year = props.year
   const review = props.review
   const number = props.number
+  const id = props.id
   return (
-    <Link href="/movie-page">
+    <Link href={`/movie-page/${id}`}>
       <div className="flex gap-4">
         <div className="font-bold text-2xl">{number}</div>
         <img
