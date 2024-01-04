@@ -1,6 +1,13 @@
-import React from 'react';
-import { Navbar } from '@/components/navbar';
-import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card";
+import React from "react";
+import { Navbar } from "@/components/navbar";
+import {
+  CardTitle,
+  CardDescription,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  Card,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -15,13 +22,19 @@ export default function SignIn() {
           <CardHeader>
             <CardTitle className="text-3xl font-bold">Sign In</CardTitle>
             <CardDescription>
-              Please enter your email and password to sign in to your Cinemania account.
+              Please enter your email and password to sign in to your Cinemania
+              account.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2 mb-4">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="moviebuff@example.com" required type="email" />
+              <Input
+                id="email"
+                placeholder="moviebuff@example.com"
+                required
+                type="email"
+              />
             </div>
             <div className="space-y-2 mb-4">
               <Label htmlFor="password">Password</Label>
@@ -29,12 +42,20 @@ export default function SignIn() {
             </div>
           </CardContent>
           <CardFooter>
-            <Button className="w-full py-2 text-white bg-blue-500 hover:bg-blue-700 rounded">Sign in</Button>
+            <Button className="w-full py-2 text-white bg-blue-500 hover:bg-blue-700 rounded">
+              Sign in
+            </Button>
           </CardFooter>
         </Card>
         <p className="mt-2 text-center text-sm text-gray-600">
           Don't have an account?
-          <Link className="font-medium text-indigo-600 hover:text-indigo-500" href="/sign-up"> Sign up</Link>
+          <Link
+            className="font-medium text-indigo-600 hover:text-indigo-500"
+            href="/sign-up"
+          >
+            {" "}
+            Sign up
+          </Link>
         </p>
       </div>
     </div>
