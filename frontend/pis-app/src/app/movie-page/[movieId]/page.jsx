@@ -9,32 +9,47 @@ import { Rating } from "@mui/material";
 
 export default function ProductDetails({ params }) {
     const [movie, setMovie] = useState({});
-    console.log(params)
+    const [actors, setActors] = useState([]);
+    const [reviewAverage, setReviewAverage] = useState(0);
+    const [reviewNumber, setReviewNumber] = useState(0);
 
     useEffect(() => {
-      const fetchMovies = async () => {
-        let data;
-        try {
-            const response = await fetch(
-                `http://20.229.152.181/productions/${params.movieId}`
-            );
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
+        const fetchMovies = async () => {
+          try {
+            const responseReviews = await fetch(`http://20.229.152.181/reviews`);
+            if (!responseReviews.ok) {
+              throw new Error(`HTTP error! Status: ${responseReviews.status}`);
             }
-            data = await response.json();
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        }
+            const reviewsData = await responseReviews.json();
+            const filteredReviews = reviewsData.filter((review) => {
+                return review.production == params.movieId
+            })
 
-        setMovie(data);
-      };
-  
-      fetchMovies();
-    }, [params.movieId]);
+            const totalReviews = filteredReviews.length
+            const totalRating = filteredReviews.reduce((sum, review) => sum + review.review, 0);
+
+            const averageRating = (totalRating / totalReviews).toFixed(2)
+
+            const responseMovie = await fetch(`http://20.229.152.181/productions/${params.movieId}`);
+            if (!responseMovie.ok) {
+              throw new Error(`HTTP error! Status: ${responseMovie.status}`);
+            }
+            const movieData = await responseMovie.json();
+            
+            setReviewAverage(averageRating);
+            setReviewNumber(totalReviews);
+            setMovie(movieData);
+    
+          } catch (error) {
+            console.error("Error fetching data:", error);
+          }
+        };
+    
+        fetchMovies();
+      }, []);
 
     console.log(movie)
     return (
-        // <div>aa</div>
         <Movie
             title={movie.title}
             description={movie.description}
@@ -42,6 +57,8 @@ export default function ProductDetails({ params }) {
             country={movie.country}
             genre={movie.genre}
             duration={movie.duration}
+            reviewNumber={reviewNumber}
+            reviewAverage={reviewAverage}
         />
     )
 }
@@ -53,6 +70,9 @@ function Movie(props) {
     const country = props.country
     const genre = props.genre
     const duration = props.duration
+    const reviewNumber = props.reviewNumber
+    const reviewAverage = props.reviewAverage
+
     const [rating, setRating] = React.useState(0);
 
     return (
@@ -74,13 +94,13 @@ function Movie(props) {
                 />
                 <div className="mt-2 flex items-center">
                     <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                    Average Rating: 4.5
+                    Average Rating: {reviewAverage}
                     </p>
                     <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
                 </div>
                 <div className="mt-2 mb-2 flex items-center">
                     <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                    Number of Ratings: 1200
+                    Number of Ratings: {reviewNumber}
                     </p>
                 </div>
                 <Rating
