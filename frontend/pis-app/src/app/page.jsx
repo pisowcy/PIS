@@ -1,9 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import Link from "next/link";
+import { useFetchMovies, fetchMovieRating } from "./dataprocessing";
+import { useState, useEffect } from "react";
 
 export default function HomePage() {
   return (
@@ -57,26 +58,26 @@ export default function HomePage() {
   );
 }
 
-function Movie({ id, title, description }) {
+function Movie({ id, title, description, rating }) {
   return (
     <Card>
       <Link href={`/movie-page/${id}`}>
         <CardHeader>
           <h3 className="text-lg font-bold text-black">{title}</h3>
-          <Badge className="text-black">8.4</Badge>
+          <Badge className="text-black">{rating}</Badge>
         </CardHeader>
         <CardContent>
-            <img
-              alt="Movie poster"
-              className="w-full h-64 object-cover"
-              height="200"
-              src="https://th.bing.com/th/id/OIP.VoUvM9GU4u_ZQIEU5629TgHaK-?rs=1&pid=ImgDetMain"
-              style={{
-                aspectRatio: "200/200",
-                objectFit: "cover",
-              }}
-              width="200"
-            />
+          <img
+            alt="Movie poster"
+            className="w-full h-64 object-cover"
+            height="200"
+            src="https://pisstorage2.blob.core.windows.net/static/poster_example.jpg"
+            style={{
+              aspectRatio: "200/200",
+              objectFit: "cover",
+            }}
+            width="200"
+          />
           <p className="mt-4 text-black">{description}</p>
         </CardContent>
       </Link>
@@ -85,41 +86,22 @@ function Movie({ id, title, description }) {
 }
 
 function MovieCards() {
-  const [movies, setMovies] = useState([]);
+  const movies = useFetchMovies();
+  const [ratings, setRatings] = useState({});
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      const ids = generateUniqueRandomIds(6, 10, 4);
-      const moviesData = [];
-
-      for (let id of ids) {
-        try {
-          const response = await fetch(
-            `http://20.229.152.181/productions/${id}`
-          );
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const data = await response.json();
-          moviesData.push(data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
+    const fetchRatings = async () => {
+      const ratingsData = {};
+      for (const movie of movies) {
+        ratingsData[movie.id] = await fetchMovieRating(1); //should be movie.id
       }
-      setMovies(moviesData);
+      setRatings(ratingsData);
     };
 
-    fetchMovies();
-  }, []);
-
-  function generateUniqueRandomIds(min, max, num) {
-    let ids = [];
-    while (ids.length < num) {
-      let id = Math.floor(Math.random() * (max - min + 1) + min);
-      if (ids.indexOf(id) === -1) ids.push(id);
+    if (movies.length) {
+      fetchRatings();
     }
-    return ids;
-  }
+  }, [movies]);
 
   return (
     <section className="px-6 py-12">
@@ -131,6 +113,7 @@ function MovieCards() {
             id={movie.id}
             title={movie.title}
             description={movie.description}
+            rating={ratings[movie.id]} // Use the fetched rating here
           />
         ))}
       </div>
