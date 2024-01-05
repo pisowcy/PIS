@@ -12,23 +12,41 @@ export default function ProductDetails({ params }) {
     const [actors, setActors] = useState([]);
     const [reviewAverage, setReviewAverage] = useState(0);
     const [reviewNumber, setReviewNumber] = useState(0);
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         const fetchMovies = async () => {
           try {
-            const responseReviews = await fetch(`http://20.229.152.181/reviews`);
+            const responseReviews = await fetch(`http://20.229.152.181/reviewsByProduction/${params.movieId}`);
             if (!responseReviews.ok) {
               throw new Error(`HTTP error! Status: ${responseReviews.status}`);
             }
             const reviewsData = await responseReviews.json();
-            const filteredReviews = reviewsData.filter((review) => {
-                return review.production == params.movieId
+
+            const reviewsText = reviewsData.map((review) => {
+              return {
+                comment: review.comment,
+                review: review.review,
+              }
             })
 
-            const totalReviews = filteredReviews.length
-            const totalRating = filteredReviews.reduce((sum, review) => sum + review.review, 0);
-
+            const totalReviews = reviewsData.length
+            const totalRating = reviewsData.reduce((sum, review) => sum + review.review, 0);
             const averageRating = (totalRating / totalReviews).toFixed(2)
+
+            const responseActors = await fetch(`http://20.229.152.181/actorsByProduction/${params.movieId}`);
+            if (!responseActors.ok) {
+              throw new Error(`HTTP error! Status: ${responseReviews.status}`);
+            }
+            const actorsData = await responseActors.json();
+
+            const actorsObject = actorsData.map((actor) => {
+              return {
+                name: actor.name,
+                surname: actor.surname,
+                id: actor.id
+              }
+            })
 
             const responseMovie = await fetch(`http://20.229.152.181/productions/${params.movieId}`);
             if (!responseMovie.ok) {
@@ -36,6 +54,8 @@ export default function ProductDetails({ params }) {
             }
             const movieData = await responseMovie.json();
             
+            setActors(actorsObject);
+            setComments(reviewsText);
             setReviewAverage(averageRating);
             setReviewNumber(totalReviews);
             setMovie(movieData);
@@ -50,16 +70,17 @@ export default function ProductDetails({ params }) {
 
     console.log(movie)
     return (
-        <Movie
-            title={movie.title}
-            description={movie.description}
-            release_date={movie.premiere_date}
-            country={movie.country}
-            genre={movie.genre}
-            duration={movie.duration}
-            reviewNumber={reviewNumber}
-            reviewAverage={reviewAverage}
-        />
+      <Movie
+          title={movie.title}
+          description={movie.description}
+          release_date={movie.premiere_date}
+          country={movie.country}
+          genre={movie.genre}
+          duration={movie.duration}
+          reviewNumber={reviewNumber}
+          reviewAverage={reviewAverage}
+          actors={actors}
+      />
     )
 }
 
@@ -72,6 +93,7 @@ function Movie(props) {
     const duration = props.duration
     const reviewNumber = props.reviewNumber
     const reviewAverage = props.reviewAverage
+    const actors = props.actors
 
     const [rating, setRating] = React.useState(0);
 
@@ -131,14 +153,13 @@ function Movie(props) {
                     </p>
                     <div className="mt-10">
                     <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                        Director and Cast
+                        Cast
                     </h3>
                     <div className="mt-2 dark:text-white">
                         <ul>
-                        <li>Director: John Doe</li>
-                        <li>Actor 1 as Character 1</li>
-                        <li>Actor 2 as Character 2</li>
-                        <li>Actor 3 as Character 3</li>
+                        {actors.map((actor) => {
+                          return <li key={actor.id}>{actor.name} {actor.surname}</li>
+                        })}
                         </ul>
                     </div>
                     </div>
