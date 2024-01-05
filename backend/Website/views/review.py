@@ -1,4 +1,7 @@
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.db.models import Count, Avg
 
 from ..models import Review
 from ..serializers.review import ReviewSerializer
@@ -22,3 +25,14 @@ class ReviewByProduction(generics.ListCreateAPIView):
     def get_queryset(self):
         production_id = self.kwargs.get('id')
         return Review.objects.filter(production_id=production_id)
+
+
+class ReviewByProductionStats(APIView):
+    def get(self, request, id):
+        reviews = Review.objects.filter(production_id=id)
+        stats = reviews.aggregate(
+            review_count=Count('id'),
+            average_score=Avg('review')
+        )
+
+        return Response(stats)

@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from ..models import Production, ActorProduction
+from ..models import Production
 from ..serializers.production import ProductionSerializer
 
 
