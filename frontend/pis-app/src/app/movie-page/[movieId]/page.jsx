@@ -2,9 +2,13 @@
 import { useEffect, useState } from "react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Rating } from "@mui/material";
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
+
 
 export default function ProductDetails({ params }) {
   const [movie, setMovie] = useState({});
@@ -24,10 +28,25 @@ export default function ProductDetails({ params }) {
         }
         const reviewsData = await responseReviews.json();
 
+        const getUserName = async (id) => {
+          let username;
+          let userData;
+          const responseUser = await fetch(
+            `http://20.229.152.181/users/${id}`
+          );
+          if (!responseUser.ok) {
+            throw new Error(`HTTP error! Status: ${responseUser.status}`);
+          }
+          userData = await responseUser.json();
+          username = userData.username;
+          return username;
+        }
+
         const reviewsText = reviewsData.map((review) => {
           return {
             comment: review.comment,
             review: review.review,
+            username: getUserName(review.user)
           };
         });
 
@@ -89,7 +108,8 @@ export default function ProductDetails({ params }) {
         reviewAverage={reviewAverage}
         actors={actors}
       />
-      <Review />
+      <Review comments={comments}/>
+      <Reviews reviews={comments}/>
     </>
   );
 }
@@ -199,12 +219,11 @@ function Movie(props) {
   );
 }
 
-function Review(props) {
-  const [rating, setRating] = React.useState(0);
-
+function Review({ comments }) {
   const [newReview, setNewReview] = useState("");
 
   const handleReviewChange = (event) => {
+    console.log(event.target.value)
     setNewReview(event.target.value);
   };
 
@@ -212,35 +231,51 @@ function Review(props) {
     event.preventDefault();
     // Tutaj możesz dodać logikę wysyłania nowej recenzji do serwera
     console.log("New review:", newReview);
-    setNewReview("");
+    // setNewReview("");
   };
 
   return (
-    <div className="mt-10">
-      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-        Reviews
-      </h3>
-      <form onSubmit={handleReviewSubmit}>
-        <label>
-          Write a review:
-          <input type="text" value={newReview} onChange={handleReviewChange} />
-        </label>
-        <input type="submit" value="Submit" />
-      </form>
-      <div className="mt-2 dark:text-white">
-        <ul>
-          {props.comments.map((comment, index) => {
-            return (
-              <li key={index}>
-                <p>Review: {comment.review}</p>
-                <p>Comment: {comment.comment}</p>
-              </li>
-            );
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold mb-2">Write a review:</h3>
+        <form className="flex flex-col space-y-4">
+          <Textarea placeholder="Type your review here." onChange={handleReviewChange} />
+          <Button onChange={handleReviewSubmit}>Submit</Button>
+        </form>
+      </div>
+  );
+}
+
+function Reviews({ reviews }) {
+  return (
+    <div className="mt-6">
+      <h3 className="text-lg font-semibold mb-4">Reviews</h3>
+        <div className="space-y-4">
+          {reviews.map((review) => {
+            return <OneReview key={review.username} username={review.username} comment={review.comment} review={review.review}/>
           })}
-        </ul>
+        </div>
+    </div>
+  )
+}
+
+function OneReview({ username, comment, review }) {
+  return (
+    <div className="bg-gray-100 p-4 rounded-lg">
+    <div className="flex items-center space-x-2 mb-2">
+      <Avatar>
+        <AvatarImage alt="User profile" src="/placeholder.svg?height=40&width=40" />
+        <AvatarFallback>JD</AvatarFallback>
+      </Avatar>
+      <div>
+        <p className="font-semibold">{username}</p>
+        <p className="text-xs text-gray-600">April 3, 2023</p>
       </div>
     </div>
-  );
+    <p>
+      {comment}
+    </p>
+  </div>
+  )
 }
 
 function StarIcon(props) {
