@@ -1,16 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
-import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Rating } from "@mui/material";
-import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
+import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
+import { StarIcon } from "@/components/icons";
 
-
-export default function ProductDetails({ params }) {
+export default function ProductionDetails({ params }) {
   const [movie, setMovie] = useState({});
   const [actors, setActors] = useState([]);
   const [reviewAverage, setReviewAverage] = useState(0);
@@ -31,31 +30,30 @@ export default function ProductDetails({ params }) {
         const getUserName = async (id) => {
           let username;
           let userData;
-          const responseUser = await fetch(
-            `http://20.229.152.181/users/${id}`
-          );
+          const responseUser = await fetch(`http://20.229.152.181/users/${id}`);
           if (!responseUser.ok) {
             throw new Error(`HTTP error! Status: ${responseUser.status}`);
           }
           userData = await responseUser.json();
           username = userData.username;
           return username;
-        }
+        };
 
         const reviewsText = reviewsData.map((review) => {
           return {
             comment: review.comment,
             review: review.review,
-            username: getUserName(review.user)
+            username: getUserName(review.user),
           };
         });
 
-        const totalReviews = reviewsData.length;
-        const totalRating = reviewsData.reduce(
-          (sum, review) => sum + review.review,
-          0
+        const responseStats = await fetch(
+          `http://20.229.152.181/reviewsByProductionStats/${params.movieId}`
         );
-        const averageRating = (totalRating / totalReviews).toFixed(2);
+        if (!responseStats.ok) {
+          throw new Error(`HTTP error! Status: ${responseStats.status}`);
+        }
+        const statsData = await responseStats.json();
 
         const responseActors = await fetch(
           `http://20.229.152.181/actorsByProduction/${params.movieId}`
@@ -83,8 +81,8 @@ export default function ProductDetails({ params }) {
 
         setActors(actorsObject);
         setComments(reviewsText);
-        setReviewAverage(averageRating);
-        setReviewNumber(totalReviews);
+        setReviewAverage(statsData.average_score);
+        setReviewNumber(statsData.review_count);
         setMovie(movieData);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -96,21 +94,19 @@ export default function ProductDetails({ params }) {
 
   console.log(movie);
   return (
-    <>
-      <Movie
-        title={movie.title}
-        description={movie.description}
-        release_date={movie.premiere_date}
-        country={movie.country}
-        genre={movie.genre}
-        duration={movie.duration}
-        reviewNumber={reviewNumber}
-        reviewAverage={reviewAverage}
-        actors={actors}
-      />
-      <Review comments={comments}/>
-      <Reviews reviews={comments}/>
-    </>
+    <Movie
+      title={movie.title}
+      description={movie.description}
+      release_date={movie.premiere_date}
+      country={movie.country}
+      genre={movie.genre}
+      duration={movie.duration}
+      reviewNumber={reviewNumber}
+      reviewAverage={reviewAverage}
+      actors={actors}
+      movieId={params.movieId}
+      comments={comments}
+    />
   );
 }
 
@@ -124,21 +120,8 @@ function Movie(props) {
   const reviewNumber = props.reviewNumber;
   const reviewAverage = props.reviewAverage;
   const actors = props.actors;
-
-  const [rating, setRating] = React.useState(0);
-
-  const [newReview, setNewReview] = useState("");
-
-  const handleReviewChange = (event) => {
-    setNewReview(event.target.value);
-  };
-
-  const handleReviewSubmit = (event) => {
-    event.preventDefault();
-    // Tutaj możesz dodać logikę wysyłania nowej recenzji do serwera
-    console.log("New review:", newReview);
-    setNewReview("");
-  };
+  const movieId = props.movieId;
+  const comments = props.comments;
 
   return (
     <main className="container mx-auto">
@@ -159,7 +142,7 @@ function Movie(props) {
             />
             <div className="mt-2 flex items-center">
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                Average Rating: {reviewAverage}
+                Average Rating: {reviewAverage.toFixed(2)}
               </p>
               <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
             </div>
@@ -168,14 +151,6 @@ function Movie(props) {
                 Number of Ratings: {reviewNumber}
               </p>
             </div>
-            <Rating
-              name="simple-controlled"
-              value={rating}
-              size="large"
-              onChange={(event, newValue) => {
-                setRating(newValue);
-              }}
-            />
           </div>
           <div>
             <CardHeader>
@@ -215,84 +190,108 @@ function Movie(props) {
           </div>
         </div>
       </Card>
+      <ReviewForm movieId={movieId} />
+      <ReviewList reviews={comments} />
     </main>
   );
 }
 
-function Review({ comments }) {
+function ReviewForm({ movieId }) {
   const [newReview, setNewReview] = useState("");
+  const [rating, setRating] = useState(0);
 
   const handleReviewChange = (event) => {
-    console.log(event.target.value)
+    console.log("change:", event.target.value);
     setNewReview(event.target.value);
   };
 
-  const handleReviewSubmit = (event) => {
+  const handleReviewSubmit = async (event) => {
     event.preventDefault();
-    // Tutaj możesz dodać logikę wysyłania nowej recenzji do serwera
     console.log("New review:", newReview);
-    // setNewReview("");
+
+    try {
+      const response = await fetch("http://20.229.152.181/reviews", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          review: rating,
+          comment: newReview,
+          user: 1,
+          production: movieId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      alert("Your review has been successfully added!");
+      window.location.reload();
+    } catch (error) {
+      console.error("Error posting review:", error);
+    }
   };
 
   return (
-      <div className="mt-6">
-        <h3 className="text-lg font-semibold mb-2">Write a review:</h3>
-        <form className="flex flex-col space-y-4">
-          <Textarea placeholder="Type your review here." onChange={handleReviewChange} />
-          <Button onChange={handleReviewSubmit}>Submit</Button>
-        </form>
-      </div>
+    <div className="mt-6">
+      <h3 className="text-lg font-semibold mb-2">Write a review:</h3>
+      <Rating
+        name="simple-controlled"
+        value={rating}
+        size="large"
+        onChange={(event, newValue) => {
+          setRating(newValue);
+        }}
+      />
+      <form className="flex flex-col space-y-4" onSubmit={handleReviewSubmit}>
+        <Textarea
+          placeholder="Type your review here."
+          onChange={handleReviewChange}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+    </div>
   );
 }
 
-function Reviews({ reviews }) {
+function ReviewList({ reviews }) {
   return (
     <div className="mt-6">
       <h3 className="text-lg font-semibold mb-4">Reviews</h3>
-        <div className="space-y-4">
-          {reviews.map((review) => {
-            return <OneReview key={review.username} username={review.username} comment={review.comment} review={review.review}/>
-          })}
-        </div>
-    </div>
-  )
-}
-
-function OneReview({ username, comment, review }) {
-  return (
-    <div className="bg-gray-100 p-4 rounded-lg">
-    <div className="flex items-center space-x-2 mb-2">
-      <Avatar>
-        <AvatarImage alt="User profile" src="/placeholder.svg?height=40&width=40" />
-        <AvatarFallback>JD</AvatarFallback>
-      </Avatar>
-      <div>
-        <p className="font-semibold">{username}</p>
-        <p className="text-xs text-gray-600">April 3, 2023</p>
+      <div className="space-y-4">
+        {reviews.map((review) => {
+          return (
+            <ReviewItem
+              key={review.username}
+              username={review.username}
+              comment={review.comment}
+              review={review.review}
+            />
+          );
+        })}
       </div>
     </div>
-    <p>
-      {comment}
-    </p>
-  </div>
-  )
+  );
 }
 
-function StarIcon(props) {
+function ReviewItem({ username, comment, review }) {
   return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-    </svg>
+    <div className="bg-gray-100 p-4 rounded-lg">
+      <div className="flex items-center space-x-2 mb-2">
+        <Avatar>
+          {/* <AvatarImage
+            alt="User profile"
+            src="/placeholder.svg?height=40&width=40"
+          /> */}
+          <AvatarFallback>U</AvatarFallback>
+        </Avatar>
+        <div>
+          <p className="font-semibold">{username}</p>
+          <p className="text-xs text-gray-600">April 3, 2023</p>
+        </div>
+      </div>
+      <p>{comment}</p>
+    </div>
   );
 }

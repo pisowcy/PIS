@@ -1,33 +1,39 @@
 "use client";
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-export default function SearchPage() {
+const Page = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          "http://20.229.152.181:5601/actor/_search",
-          {
-            data: {
-              query: {
-                match_phrase_prefix: {
-                  name: {
-                    query: "Zo",
-                    slop: 3,
-                    max_expansions: 10,
-                  },
-                },
-              },
+      const url = "http://20.229.152.181:9200/actor/_search";
+      const requestData = {
+        query: {
+          match_phrase_prefix: {
+            name: {
+              query: "Zo",
+              slop: 3,
+              max_expansions: 10,
             },
-          }
-        );
+          },
+        },
+      };
+      const config = {
+        auth: {
+          username: "admin",
+          password: "admin",
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
+      try {
+        const response = await axios.get(url, { ...config, data: requestData });
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data: ", error);
       }
     };
 
@@ -36,8 +42,10 @@ export default function SearchPage() {
 
   return (
     <div>
-      {/* Render your data here */}
-      {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
+      <h1>Actor Data</h1>
+      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>No data</p>}
     </div>
   );
-}
+};
+
+export default Page;
