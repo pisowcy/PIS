@@ -1,174 +1,246 @@
 "use client";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Rating } from "@mui/material";
 
-
 export default function ProductDetails({ params }) {
-    const [movie, setMovie] = useState({});
-    const [actors, setActors] = useState([]);
-    const [reviewAverage, setReviewAverage] = useState(0);
-    const [reviewNumber, setReviewNumber] = useState(0);
-    const [comments, setComments] = useState([]);
+  const [movie, setMovie] = useState({});
+  const [actors, setActors] = useState([]);
+  const [reviewAverage, setReviewAverage] = useState(0);
+  const [reviewNumber, setReviewNumber] = useState(0);
+  const [comments, setComments] = useState([]);
 
-    useEffect(() => {
-        const fetchMovies = async () => {
-          try {
-            const responseReviews = await fetch(`http://20.229.152.181/reviewsByProduction/${params.movieId}`);
-            if (!responseReviews.ok) {
-              throw new Error(`HTTP error! Status: ${responseReviews.status}`);
-            }
-            const reviewsData = await responseReviews.json();
+  useEffect(() => {
+    const fetchMovies = async () => {
+      try {
+        const responseReviews = await fetch(
+          `http://20.229.152.181/reviewsByProduction/${params.movieId}`
+        );
+        if (!responseReviews.ok) {
+          throw new Error(`HTTP error! Status: ${responseReviews.status}`);
+        }
+        const reviewsData = await responseReviews.json();
 
-            const reviewsText = reviewsData.map((review) => {
-              return {
-                comment: review.comment,
-                review: review.review,
-              }
-            })
+        const reviewsText = reviewsData.map((review) => {
+          return {
+            comment: review.comment,
+            review: review.review,
+          };
+        });
 
-            const totalReviews = reviewsData.length
-            const totalRating = reviewsData.reduce((sum, review) => sum + review.review, 0);
-            const averageRating = (totalRating / totalReviews).toFixed(2)
+        const totalReviews = reviewsData.length;
+        const totalRating = reviewsData.reduce(
+          (sum, review) => sum + review.review,
+          0
+        );
+        const averageRating = (totalRating / totalReviews).toFixed(2);
 
-            const responseActors = await fetch(`http://20.229.152.181/actorsByProduction/${params.movieId}`);
-            if (!responseActors.ok) {
-              throw new Error(`HTTP error! Status: ${responseReviews.status}`);
-            }
-            const actorsData = await responseActors.json();
+        const responseActors = await fetch(
+          `http://20.229.152.181/actorsByProduction/${params.movieId}`
+        );
+        if (!responseActors.ok) {
+          throw new Error(`HTTP error! Status: ${responseReviews.status}`);
+        }
+        const actorsData = await responseActors.json();
 
-            const actorsObject = actorsData.map((actor) => {
-              return {
-                name: actor.name,
-                surname: actor.surname,
-                id: actor.id
-              }
-            })
+        const actorsObject = actorsData.map((actor) => {
+          return {
+            name: actor.name,
+            surname: actor.surname,
+            id: actor.id,
+          };
+        });
 
-            const responseMovie = await fetch(`http://20.229.152.181/productions/${params.movieId}`);
-            if (!responseMovie.ok) {
-              throw new Error(`HTTP error! Status: ${responseMovie.status}`);
-            }
-            const movieData = await responseMovie.json();
-            
-            setActors(actorsObject);
-            setComments(reviewsText);
-            setReviewAverage(averageRating);
-            setReviewNumber(totalReviews);
-            setMovie(movieData);
-    
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          }
-        };
-    
-        fetchMovies();
-      }, []);
+        const responseMovie = await fetch(
+          `http://20.229.152.181/productions/${params.movieId}`
+        );
+        if (!responseMovie.ok) {
+          throw new Error(`HTTP error! Status: ${responseMovie.status}`);
+        }
+        const movieData = await responseMovie.json();
 
-    console.log(movie)
-    return (
+        setActors(actorsObject);
+        setComments(reviewsText);
+        setReviewAverage(averageRating);
+        setReviewNumber(totalReviews);
+        setMovie(movieData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchMovies();
+  }, []);
+
+  console.log(movie);
+  return (
+    <>
       <Movie
-          title={movie.title}
-          description={movie.description}
-          release_date={movie.premiere_date}
-          country={movie.country}
-          genre={movie.genre}
-          duration={movie.duration}
-          reviewNumber={reviewNumber}
-          reviewAverage={reviewAverage}
-          actors={actors}
+        title={movie.title}
+        description={movie.description}
+        release_date={movie.premiere_date}
+        country={movie.country}
+        genre={movie.genre}
+        duration={movie.duration}
+        reviewNumber={reviewNumber}
+        reviewAverage={reviewAverage}
+        actors={actors}
       />
-    )
+      <Review />
+    </>
+  );
 }
 
 function Movie(props) {
-    const title = props.title
-    const description = props.description
-    const release_date = props.release_date
-    const country = props.country
-    const genre = props.genre
-    const duration = props.duration
-    const reviewNumber = props.reviewNumber
-    const reviewAverage = props.reviewAverage
-    const actors = props.actors
+  const title = props.title;
+  const description = props.description;
+  const release_date = props.release_date;
+  const country = props.country;
+  const genre = props.genre;
+  const duration = props.duration;
+  const reviewNumber = props.reviewNumber;
+  const reviewAverage = props.reviewAverage;
+  const actors = props.actors;
 
-    const [rating, setRating] = React.useState(0);
+  const [rating, setRating] = React.useState(0);
 
-    return (
-        <main className="container mx-auto">
-            <Navbar />
-            <Card className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
-            <div className="md:flex">
-                <div className="md:flex-shrink-0 ml-6 mt-6">
-                <img
-                    alt="Movie 3 poster"
-                    className="w-56 h-80 object-cover rounded-md"
-                    height="600"
-                    src="/poster-example.jpg"
-                    style={{
-                    aspectRatio: "140/200",
-                    objectFit: "cover",
-                    }}
-                    width="420"
-                />
-                <div className="mt-2 flex items-center">
-                    <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                    Average Rating: {reviewAverage}
-                    </p>
-                    <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
-                </div>
-                <div className="mt-2 mb-2 flex items-center">
-                    <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                    Number of Ratings: {reviewNumber}
-                    </p>
-                </div>
-                <Rating
-                    name="simple-controlled"
-                    value={rating}
-                    size="large"
-                    onChange={(event, newValue) => {
-                    setRating(newValue);
-                    }}
-                />
-                </div>
-                <div>
-                <CardHeader>
-                    <Badge className="inline-flex items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {}
-                    </Badge>
+  const [newReview, setNewReview] = useState("");
 
-                    <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
-                    {title}
-                    </h2>
-                    <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                    Release Date: {release_date} | Country: {country} | Duration: {duration} min
-                    </p>
-                </CardHeader>
-                <CardContent>
-                    <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                    {description}
-                    </p>
-                    <div className="mt-10">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                        Cast
-                    </h3>
-                    <div className="mt-2 dark:text-white">
-                        <ul>
-                        {actors.map((actor) => {
-                          return <li key={actor.id}>{actor.name} {actor.surname}</li>
-                        })}
-                        </ul>
-                    </div>
-                    </div>
-                </CardContent>
-                </div>
+  const handleReviewChange = (event) => {
+    setNewReview(event.target.value);
+  };
+
+  const handleReviewSubmit = (event) => {
+    event.preventDefault();
+    // Tutaj możesz dodać logikę wysyłania nowej recenzji do serwera
+    console.log("New review:", newReview);
+    setNewReview("");
+  };
+
+  return (
+    <main className="container mx-auto">
+      <Navbar />
+      <Card className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
+        <div className="md:flex">
+          <div className="md:flex-shrink-0 ml-6 mt-6">
+            <img
+              alt="Movie 3 poster"
+              className="w-56 h-80 object-cover rounded-md"
+              height="600"
+              src="/poster-example.jpg"
+              style={{
+                aspectRatio: "140/200",
+                objectFit: "cover",
+              }}
+              width="420"
+            />
+            <div className="mt-2 flex items-center">
+              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
+                Average Rating: {reviewAverage}
+              </p>
+              <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
             </div>
-            </Card>
-        </main>
-    );
+            <div className="mt-2 mb-2 flex items-center">
+              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
+                Number of Ratings: {reviewNumber}
+              </p>
+            </div>
+            <Rating
+              name="simple-controlled"
+              value={rating}
+              size="large"
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+            />
+          </div>
+          <div>
+            <CardHeader>
+              <Badge className="inline-block items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                {genre}
+              </Badge>
+
+              <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
+                {title}
+              </h2>
+              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                Release Date: {release_date} | Country: {country} | Duration:{" "}
+                {duration} min
+              </p>
+            </CardHeader>
+            <CardContent>
+              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                {description}
+              </p>
+              <div className="mt-10">
+                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                  Cast
+                </h3>
+                <div className="mt-2 dark:text-white">
+                  <ul>
+                    {actors.map((actor) => {
+                      return (
+                        <li key={actor.id}>
+                          {actor.name} {actor.surname}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </div>
+        </div>
+      </Card>
+    </main>
+  );
+}
+
+function Review(props) {
+  const [rating, setRating] = React.useState(0);
+
+  const [newReview, setNewReview] = useState("");
+
+  const handleReviewChange = (event) => {
+    setNewReview(event.target.value);
+  };
+
+  const handleReviewSubmit = (event) => {
+    event.preventDefault();
+    // Tutaj możesz dodać logikę wysyłania nowej recenzji do serwera
+    console.log("New review:", newReview);
+    setNewReview("");
+  };
+
+  return (
+    <div className="mt-10">
+      <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+        Reviews
+      </h3>
+      <form onSubmit={handleReviewSubmit}>
+        <label>
+          Write a review:
+          <input type="text" value={newReview} onChange={handleReviewChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+      <div className="mt-2 dark:text-white">
+        <ul>
+          {props.comments.map((comment, index) => {
+            return (
+              <li key={index}>
+                <p>Review: {comment.review}</p>
+                <p>Comment: {comment.comment}</p>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
 }
 
 function StarIcon(props) {
