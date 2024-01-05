@@ -7,8 +7,9 @@ import { useEffect } from "react";
 
 export default function MovieRanking() {
   return (
+    <>
+    <Navbar />
     <main className="mx-auto px-4 md:px-6 max-w-7xl grid gap-12 flex justify-center">
-      <Navbar />
       <Card className="w-full">
         <CardHeader>
           <h2 className="text-2xl font-bold">Top Movies</h2>
@@ -18,6 +19,7 @@ export default function MovieRanking() {
         </CardContent>
       </Card>
     </main>
+    </>
   );
 }
 
