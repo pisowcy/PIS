@@ -124,75 +124,77 @@ function Movie(props) {
   const comments = props.comments;
 
   return (
-    <main className="container mx-auto">
+    <>
       <Navbar />
-      <Card className="max-w-4xl mx-auto bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
-        <div className="md:flex">
-          <div className="md:flex-shrink-0 ml-6 mt-6">
-            <img
-              alt="Movie 3 poster"
-              className="w-56 h-80 object-cover rounded-md"
-              height="600"
-              src="/poster-example.jpg"
-              style={{
-                aspectRatio: "140/200",
-                objectFit: "cover",
-              }}
-              width="420"
-            />
-            <div className="mt-2 flex items-center">
-              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                Average Rating: {reviewAverage.toFixed(2)}
-              </p>
-              <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
-            </div>
-            <div className="mt-2 mb-2 flex items-center">
-              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                Number of Ratings: {reviewNumber}
-              </p>
-            </div>
-          </div>
-          <div>
-            <CardHeader>
-              <Badge className="inline-block items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {genre}
-              </Badge>
-
-              <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
-                {title}
-              </h2>
-              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                Release Date: {release_date} | Country: {country} | Duration:{" "}
-                {duration} min
-              </p>
-            </CardHeader>
-            <CardContent>
-              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                {description}
-              </p>
-              <div className="mt-10">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                  Cast
-                </h3>
-                <div className="mt-2 dark:text-white">
-                  <ul>
-                    {actors.map((actor) => {
-                      return (
-                        <li key={actor.id}>
-                          {actor.name} {actor.surname}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+      <main className="container mx-auto">
+        <Card className="max-w-4xl mx-auto mt-4 bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
+          <div className="md:flex">
+            <div className="md:flex-shrink-0 ml-6 mt-6">
+              <img
+                alt="Movie 3 poster"
+                className="w-56 h-80 object-cover rounded-md"
+                height="600"
+                src="/poster-example.jpg"
+                style={{
+                  aspectRatio: "140/200",
+                  objectFit: "cover",
+                }}
+                width="420"
+              />
+              <div className="mt-2 flex items-center">
+                <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
+                  Average Rating: {reviewAverage.toFixed(2)}
+                </p>
+                <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
               </div>
-            </CardContent>
+              <div className="mt-2 mb-2 flex items-center">
+                <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
+                  Number of Ratings: {reviewNumber}
+                </p>
+              </div>
+            </div>
+            <div>
+              <CardHeader>
+                <Badge className="inline-block items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {genre}
+                </Badge>
+
+                <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
+                  {title}
+                </h2>
+                <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                  Release Date: {release_date} | Country: {country} | Duration:{" "}
+                  {duration} min
+                </p>
+              </CardHeader>
+              <CardContent>
+                <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                  {description}
+                </p>
+                <div className="mt-10">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                    Cast
+                  </h3>
+                  <div className="mt-2 dark:text-white">
+                    <ul>
+                      {actors.map((actor) => {
+                        return (
+                          <li key={actor.id}>
+                            {actor.name} {actor.surname}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </div>
           </div>
-        </div>
-      </Card>
-      <ReviewForm movieId={movieId} />
-      <ReviewList reviews={comments} />
-    </main>
+        </Card>
+        <ReviewForm movieId={movieId} />
+        <ReviewList reviews={comments} />
+      </main>
+    </>
   );
 }
 
@@ -234,7 +236,7 @@ function ReviewForm({ movieId }) {
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-6 mx-auto w-2/3">
       <h3 className="text-lg font-semibold mb-2">Write a review:</h3>
       <Rating
         name="simple-controlled"
@@ -249,7 +251,12 @@ function ReviewForm({ movieId }) {
           placeholder="Type your review here."
           onChange={handleReviewChange}
         />
-        <Button type="submit">Submit</Button>
+        <Button
+          className="w-1/2 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded mx-auto"
+          type="submit"
+        >
+          Submit
+        </Button>
       </form>
     </div>
   );
@@ -257,7 +264,7 @@ function ReviewForm({ movieId }) {
 
 function ReviewList({ reviews }) {
   return (
-    <div className="mt-6">
+    <div className="mt-6 mx-auto w-2/3">
       <h3 className="text-lg font-semibold mb-4">Reviews</h3>
       <div className="space-y-4">
         {reviews.map((review) => {
@@ -288,7 +295,9 @@ function ReviewItem({ username, comment, review }) {
         </Avatar>
         <div>
           <p className="font-semibold">{username}</p>
-          <p className="text-xs text-gray-600">April 3, 2023</p>
+          <p className="text-xs text-gray-600">
+            {review} {review === 1 ? "star" : "stars"}
+          </p>
         </div>
       </div>
       <p>{comment}</p>
