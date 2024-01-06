@@ -15,7 +15,6 @@ export default function ProductionDetails({ params }) {
   const [reviewAverage, setReviewAverage] = useState(0);
   const [reviewNumber, setReviewNumber] = useState(0);
   const [comments, setComments] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -87,34 +86,25 @@ export default function ProductionDetails({ params }) {
         setMovie(movieData);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     fetchMovies();
   }, []);
   return (
-    <main>
-      <Navbar />
-      {isLoading ? (
-        <LoadingAnimation />
-      ) : (
-        <Movie
-          title={movie.title}
-          description={movie.description}
-          release_date={movie.premiere_date}
-          country={movie.country}
-          genre={movie.genre}
-          duration={movie.duration}
-          reviewNumber={reviewNumber}
-          reviewAverage={reviewAverage}
-          actors={actors}
-          movieId={params.movieId}
-          comments={comments}
-        />
-      )}
-    </main>
+    <Movie
+      title={movie.title}
+      description={movie.description}
+      release_date={movie.premiere_date}
+      country={movie.country}
+      genre={movie.genre}
+      duration={movie.duration}
+      reviewNumber={reviewNumber}
+      reviewAverage={reviewAverage}
+      actors={actors}
+      movieId={params.movieId}
+      comments={comments}
+    />
   );
 }
 
@@ -245,76 +235,50 @@ function Movie(props) {
               <div className="mt-2 mb-2 flex items-center">
                 <FavouriteButton movieId={movieId} />
               </div>
-    <div className="container mx-auto">
-      <Card className="max-w-4xl mx-auto mt-4 bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
-        <div className="md:flex">
-          <div className="md:flex-shrink-0 ml-6 mt-6">
-            <img
-              alt="Movie 3 poster"
-              className="w-56 h-80 object-cover rounded-md"
-              height="600"
-              src="/poster-example.jpg"
-              style={{
-                aspectRatio: "140/200",
-                objectFit: "cover",
-              }}
-              width="420"
-            />
-            <div className="mt-2 flex items-center">
-              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                Average Rating: {reviewAverage.toFixed(2)}
-              </p>
-              <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
             </div>
-            <div className="mt-2 mb-2 flex items-center">
-              <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                Number of Ratings: {reviewNumber}
-              </p>
-            </div>
-          </div>
-          <div>
-            <CardHeader>
-              <Badge className="inline-block items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                {genre}
-              </Badge>
+            <div>
+              <CardHeader>
+                <Badge className="inline-block items-center px-3 py-0.5 mt-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                  {genre}
+                </Badge>
 
-              <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
-                {title}
-              </h2>
-              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                Release Date: {release_date} | Country: {country} | Duration:{" "}
-                {duration} min
-              </p>
-            </CardHeader>
-            <CardContent>
-              <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
-                {description}
-              </p>
-              <div className="mt-10">
-                <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
-                  Cast
-                </h3>
-                <div className="mt-2 dark:text-white">
-                  <ul>
-                    {actors.map((actor) => {
-                      return (
-                        <li key={actor.id}>
-                          {actor.name} {actor.surname}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                <h2 className="mt-2 text-2xl leading-7 font-bold text-gray-900 dark:text-white">
+                  {title}
+                </h2>
+                <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                  Release Date: {release_date} | Country: {country} | Duration:{" "}
+                  {duration} min
+                </p>
+              </CardHeader>
+              <CardContent>
+                <p className="mt-3 text-base leading-6 text-gray-500 dark:text-gray-300">
+                  {description}
+                </p>
+                <div className="mt-10">
+                  <h3 className="text-lg leading-6 font-medium text-gray-900 dark:text-white">
+                    Cast
+                  </h3>
+                  <div className="mt-2 dark:text-white">
+                    <ul>
+                      {actors.map((actor) => {
+                        return (
+                          <li key={actor.id}>
+                            {actor.name} {actor.surname}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
+              </CardContent>
+            </div>
           </div>
-        </div>
-      </Card>
-      <ReviewForm movieId={movieId} />
-      <ReviewList reviews={comments} />
-    </div>
-
-  );</>
+        </Card>
+        <ReviewForm movieId={movieId} />
+        <ReviewList reviews={comments} />
+      </main>
+    </>
+  );
 }
 
 function ReviewForm({ movieId }) {
@@ -422,18 +386,4 @@ function ReviewItem({ username, comment, review }) {
       <p>{comment}</p>
     </div>
   );
-}
-
-function LoadingAnimation() {
-  const [dots, setDots] = useState(1);
-
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setDots((prevDots) => (prevDots === 3 ? 1 : prevDots + 1));
-    }, 300);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
-  return <p>Loading{Array(dots).fill('.').join('')}</p>;
 }
