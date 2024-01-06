@@ -16,6 +16,7 @@ export default function ProductionDetails({ params }) {
   const [reviewNumber, setReviewNumber] = useState(0);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -87,6 +88,7 @@ export default function ProductionDetails({ params }) {
         setMovie(movieData);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoadingError(error);
       } finally {
         setIsLoading(false);
       }
@@ -97,24 +99,28 @@ export default function ProductionDetails({ params }) {
 
   console.log(movie);
   return (
-    <main>
+      <main>
       <Navbar />
-      {isLoading ? (
-        <LoadingAnimation />
+      {loadingError ? (
+        alert(`There is a problem with Your internet connection\nCheck it and try again`)
       ) : (
-        <Movie
-          title={movie.title}
-          description={movie.description}
-          release_date={movie.premiere_date}
-          country={movie.country}
-          genre={movie.genre}
-          duration={movie.duration}
-          reviewNumber={reviewNumber}
-          reviewAverage={reviewAverage}
-          actors={actors}
-          movieId={params.movieId}
-          comments={comments}
-        />
+        isLoading ? (
+          <LoadingAnimation />
+        ) : (
+          <Movie
+            title={movie.title}
+            description={movie.description}
+            release_date={movie.premiere_date}
+            country={movie.country}
+            genre={movie.genre}
+            duration={movie.duration}
+            reviewNumber={reviewNumber}
+            reviewAverage={reviewAverage}
+            actors={actors}
+            movieId={params.movieId}
+            comments={comments}
+          />
+        )
       )}
     </main>
   );
@@ -321,6 +327,14 @@ function LoadingAnimation() {
     }, 300);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      alert("There seems to be a connection with backend problem.\nTry again later");
+    }, 10000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return <p>Loading{Array(dots).fill('.').join('')}</p>;
