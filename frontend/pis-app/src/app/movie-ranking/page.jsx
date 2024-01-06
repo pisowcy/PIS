@@ -90,7 +90,7 @@ function Ranking() {
   return (
     <div className="flex flex-col gap-6">
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingAnimation />
       ) : (
         productions.map((production, index) => {
           var dateString = production.premiere_date
@@ -154,6 +154,19 @@ function Movie(props) {
   );
 }
 
+function LoadingAnimation() {
+  const [dots, setDots] = useState(1);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDots((prevDots) => (prevDots === 3 ? 1 : prevDots + 1));
+    }, 300);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return <p>Loading{Array(dots).fill('.').join('')}</p>;
+}
 
 function StarIcon(props) {
   return (

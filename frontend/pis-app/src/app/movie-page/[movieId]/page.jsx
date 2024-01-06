@@ -100,7 +100,7 @@ export default function ProductionDetails({ params }) {
     <main>
       <Navbar />
       {isLoading ? (
-        <p>Loading...</p>
+        <LoadingAnimation />
       ) : (
         <Movie
           title={movie.title}
@@ -310,4 +310,18 @@ function ReviewItem({ username, comment, review }) {
       <p>{comment}</p>
     </div>
   );
+}
+
+function LoadingAnimation() {
+  const [dots, setDots] = useState(1);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDots((prevDots) => (prevDots === 3 ? 1 : prevDots + 1));
+    }, 300);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return <p>Loading{Array(dots).fill('.').join('')}</p>;
 }
