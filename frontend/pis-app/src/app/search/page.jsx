@@ -30,7 +30,7 @@ const Page = () => {
       };
 
       try {
-        const response = await axios.get(url, { ...config, data: requestData });
+        const response = await axios.post(url, requestData, config);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);

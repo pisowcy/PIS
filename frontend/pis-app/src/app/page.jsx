@@ -6,14 +6,55 @@ import Link from "next/link";
 import { useFetchMovies, fetchMovieRating } from "./dataprocessing";
 import { useState, useEffect } from "react";
 import { StarIcon } from "@/components/staricon";
+import axios from "axios";
 
 export default function HomePage() {
+  const [data, setData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchSubmit = async (event) => {
+    event.preventDefault();
+    const url = "http://20.229.152.181:9200/actor/_search";
+    const requestData = {
+      query: {
+        match_phrase_prefix: {
+          name: {
+            query: searchTerm,
+            slop: 3,
+            max_expansions: 10,
+          },
+        },
+      },
+    };
+    const config = {
+      auth: {
+        username: "admin",
+        password: "admin",
+      },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    try {
+      const response = await axios.post(url, requestData, config);
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data: ", error);
+    }
+  };
+
   return (
     <div
       className="flex flex-col min-h-screen bg-gray-100"
       data-testid="home-page"
     >
       <Navbar />
+      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>No data</p>}
       <main className="flex-1">
         <section className="relative w-full h-96">
           <img
@@ -36,11 +77,16 @@ export default function HomePage() {
                 Explore and rate your favourite productions
               </p>
               <div className="mt-4">
-                <input
-                  className="w-64 py-2 px-4 rounded-md text-black"
-                  placeholder="Search for a movie"
-                  type="text"
-                />
+                <form onSubmit={handleSearchSubmit}>
+                  <input
+                    className="w-64 py-2 px-4 rounded-md text-black"
+                    placeholder="Search for a movie"
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                  />
+                  <button type="submit">Search</button>
+                </form>
               </div>
             </div>
           </div>
