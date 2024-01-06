@@ -8,7 +8,7 @@ export function ReviewList({ reviews }) {
           {reviews.map((review) => {
             return (
               <ReviewItem
-                key={review.username}
+                key={review.id}
                 username={review.username}
                 comment={review.comment}
                 review={review.review}
