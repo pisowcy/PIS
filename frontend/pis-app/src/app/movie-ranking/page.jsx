@@ -24,56 +24,63 @@ export default function MovieRanking() {
 }
 
 function Ranking() {
-  const [movies, setMovies] = useState([]);
-  const [reviewsAverage, setReviewsAverage] = useState({});
+  const [productions, setProductions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const responseReviews = await fetch(`http://20.229.152.181/reviews`);
-        if (!responseReviews.ok) {
-          throw new Error(`HTTP error! Status: ${responseReviews.status}`);
-        }
-        const reviewsData = await responseReviews.json();
-
-        const mappedReviews = reviewsData.flat();
-        const reviewsAverageData = mappedReviews.reduce((acc, review) => {
-          const { production, review: reviewValue } = review;
-
-          if (!acc[production]) {
-            acc[production] = { total: 0, count: 0 };
+        // hardcoded ids, have to find some way to get them from api
+        const ids = Array.from({ length: 5}, (_, index) => 6 + index);
+        let reviews = [];
+        for (let id of ids) {
+          const responseReviews = await fetch(`http://20.229.152.181/reviewsByProductionStats/${id}`);
+          if (!responseReviews.ok) {
+            throw new Error(`HTTP error! Status: ${responseReviews.status}`);
           }
+          const reviewsData = await responseReviews.json();
+          reviews.push({productionId: id, average_score: reviewsData.average_score})
+        }
 
-          acc[production].total += reviewValue;
-          acc[production].count += 1;
+        reviews.sort((a, b) => b.average_score - a.average_score);
+        const limitedReviews = reviews.slice(0,100);
+        console.log(limitedReviews)
 
+        const productionsAverageScore = limitedReviews.reduce((acc, review) => {
+          acc[review.productionId] = review.average_score.toFixed(2);
           return acc;
         }, {});
 
-        for (const production in reviewsAverageData) {
-          const { total, count } = reviewsAverageData[production];
-          reviewsAverageData[production] = (total / count).toFixed(2);
+        const bestProductionsIds = limitedReviews.map((production) => production.productionId)
+        
+        let productionsData = [];
+        for (let id of bestProductionsIds) {
+          const responseProduction = await fetch(`http://20.229.152.181/productions/${id}`);
+          if (!responseProduction.ok) {
+            throw new Error(`HTTP error! Status: ${responseProduction.status}`);
+          }
+          const productionData = await responseProduction.json();
+          productionsData.push(productionData);
         }
 
-        setReviewsAverage(reviewsAverageData);
+        const productionsDataWithAverageScore = productionsData.map((production) => {
+          return {
+              id: production.id,
+              title: production.title,
+              description: production.description,
+              premiere_date: production.premiere_date,
+              country: production.country,
+              genre: production.genre,
+              average_score: productionsAverageScore[production.id]
+          }
+        })
 
-        const responseMovies = await fetch(`http://20.229.152.181/productions`);
-        if (!responseMovies.ok) {
-          throw new Error(`HTTP error! Status: ${responseMovies.status}`);
-        }
-        const moviesData = await responseMovies.json();
-
-        const sortedMovies = moviesData.sort((a, b) => {
-          const ratingA = reviewsAverageData[a.id] || 0;
-          const ratingB = reviewsAverageData[b.id] || 0;
-          return ratingB - ratingA;
-        });
-
-        const limitedMovies = sortedMovies.slice(0, 100);
-        setMovies(limitedMovies);
+        setProductions(productionsDataWithAverageScore);
 
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -82,23 +89,25 @@ function Ranking() {
 
   return (
     <div className="flex flex-col gap-6">
-      {
-        movies.map((movie, index) => {
-          var dateString = movie.premiere_date
+      {isLoading ? (
+        <LoadingAnimation />
+      ) : (
+        productions.map((production, index) => {
+          var dateString = production.premiere_date
           var date = new Date(dateString)
           var year = date.getFullYear()
           return <Movie 
-            key={movie.id}
-            id={movie.id}
-            description={movie.description}
-            title={movie.title}
-            genre={movie.genre}
+            key={production.id}
+            id={production.id}
+            description={production.description}
+            title={production.title}
+            genre={production.genre}
             year={year}
-            review={reviewsAverage[movie.id]}
-            number={index+1}
+            review={production.average_score}
+            number={index + 1}
           />
         })
-      }
+      )}
     </div>
   )
 }
@@ -136,15 +145,28 @@ function Movie(props) {
           </p>
           <p className="text-gray-500 dark:text-gray-400">Year: {year}</p>
         </div>
-        <div className="self-start ml-auto text-lg">
-          <StarIcon className="w-4 h-4 inline-block mr-1" />
-          {review}
+        <div className="flex items-center mt-auto" style={{paddingBottom: '8rem'}}>
+            <StarIcon className="w-4 h-4 inline-block mr-1" />
+            <span className="text-lg">{review}</span>
         </div>
       </div>
     </Link>
   );
 }
 
+function LoadingAnimation() {
+  const [dots, setDots] = useState(1);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setDots((prevDots) => (prevDots === 3 ? 1 : prevDots + 1));
+    }, 300);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return <p>Loading{Array(dots).fill('.').join('')}</p>;
+}
 
 function StarIcon(props) {
   return (
