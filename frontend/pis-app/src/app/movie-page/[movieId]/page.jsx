@@ -1,5 +1,5 @@
 "use client";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ export default function ProductionDetails({ params }) {
   const [reviewNumber, setReviewNumber] = useState(0);
   const [comments, setComments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingError, setLoadingError] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -87,6 +88,7 @@ export default function ProductionDetails({ params }) {
         setMovie(movieData);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoadingError(error);
       } finally {
         setIsLoading(false);
       }
@@ -94,109 +96,33 @@ export default function ProductionDetails({ params }) {
 
     fetchMovies();
   }, []);
+
+  console.log(movie);
   return (
-    <main>
+      <main>
       <Navbar />
-      {isLoading ? (
-        <LoadingAnimation />
+      {loadingError ? (
+        alert(`There is a problem with Your internet connection\nCheck it and try again`)
       ) : (
-        <Movie
-          title={movie.title}
-          description={movie.description}
-          release_date={movie.premiere_date}
-          country={movie.country}
-          genre={movie.genre}
-          duration={movie.duration}
-          reviewNumber={reviewNumber}
-          reviewAverage={reviewAverage}
-          actors={actors}
-          movieId={params.movieId}
-          comments={comments}
-        />
+        isLoading ? (
+          <LoadingAnimation />
+        ) : (
+          <Movie
+            title={movie.title}
+            description={movie.description}
+            release_date={movie.premiere_date}
+            country={movie.country}
+            genre={movie.genre}
+            duration={movie.duration}
+            reviewNumber={reviewNumber}
+            reviewAverage={reviewAverage}
+            actors={actors}
+            movieId={params.movieId}
+            comments={comments}
+          />
+        )
       )}
     </main>
-  );
-}
-
-function FavouriteButton(movieId) {
-  const [isFavorite, setIsFavorite] = useState(false);
-  useEffect(() => {
-    fetchFavorites();
-  }, []);
-  const fetchFavorites = async () => {
-    try {
-      const response = await fetch(
-        `http://20.229.152.181/favoriteUserProductionByUser/1`
-      );
-      const favorites = await response.json();
-      const isFav = favorites.some(
-        (fav) => fav.production === +movieId.movieId
-      );
-      console.log(isFav, movieId);
-      setIsFavorite(isFav);
-    } catch (error) {
-      console.error("Error fetching favorites:", error);
-    }
-  };
-  const addToFavorites = async () => {
-    try {
-      const response = await fetch(
-        `http://20.229.152.181/favoriteUserProduction`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user: 1, production: movieId }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      setIsFavorite(true);
-    } catch (error) {
-      console.error("Error adding to favorites:", error);
-    }
-  };
-  const removeFromFavorites = async () => {
-    try {
-      const response = await fetch(
-        `http://20.229.152.181/favoriteUserProduction`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ user: 1, production: movieId }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
-      setIsFavorite(false);
-    } catch (error) {
-      console.error("Error removing from favorites:", error);
-    }
-  };
-
-  const toggleFavorite = () => {
-    if (isFavorite) {
-      removeFromFavorites();
-    } else {
-      addToFavorites();
-    }
-  };
-  return (
-    <button
-      className="w-1/2 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded mx-auto"
-      onClick={toggleFavorite}
-    >
-      {isFavorite ? "Remove ♥" : "Add ♡"}
-    </button>
   );
 }
 
@@ -214,37 +140,6 @@ function Movie(props) {
   const comments = props.comments;
 
   return (
-    <>
-      <Navbar />
-      <main className="container mx-auto">
-        <Card className="max-w-4xl mx-auto mt-4 bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
-          <div className="md:flex">
-            <div className="md:flex-shrink-0 ml-6 mt-6">
-              <img
-                alt="Movie 3 poster"
-                className="w-56 h-80 object-cover rounded-md"
-                height="600"
-                src="/poster-example.jpg"
-                style={{
-                  aspectRatio: "140/200",
-                  objectFit: "cover",
-                }}
-                width="420"
-              />
-              <div className="mt-2 flex items-center">
-                <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                  Average Rating: {reviewAverage.toFixed(2)}
-                </p>
-                <StarIcon className="w-4 h-4 ml-2 dark:text-white" />
-              </div>
-              <div className="mt-2 mb-2 flex items-center">
-                <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
-                  Number of Ratings: {reviewNumber}
-                </p>
-              </div>
-              <div className="mt-2 mb-2 flex items-center">
-                <FavouriteButton movieId={movieId} />
-              </div>
     <div className="container mx-auto">
       <Card className="max-w-4xl mx-auto mt-4 bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
         <div className="md:flex">
@@ -313,8 +208,7 @@ function Movie(props) {
       <ReviewForm movieId={movieId} />
       <ReviewList reviews={comments} />
     </div>
-
-  );</>
+  );
 }
 
 function ReviewForm({ movieId }) {
@@ -433,6 +327,14 @@ function LoadingAnimation() {
     }, 300);
 
     return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      alert("There seems to be a connection with backend problem.\nTry again later");
+    }, 10000);
+
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return <p>Loading{Array(dots).fill('.').join('')}</p>;
