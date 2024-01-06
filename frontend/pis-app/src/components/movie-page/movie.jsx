@@ -3,8 +3,21 @@ import { Badge } from "@/components/ui/badge";
 import { StarIcon } from "../staricon";
 import { ReviewForm } from "./reviewform";
 import { ReviewList } from "./reviewlist";
+import { FavouriteButton } from "./favouritebutton";
 
-export function Movie({ title, description, release_date, country, genre, duration, reviewNumber, reviewAverage, actors, movieId, comments}) {
+export function Movie({
+  title,
+  description,
+  release_date,
+  country,
+  genre,
+  duration,
+  reviewNumber,
+  reviewAverage,
+  actors,
+  movieId,
+  comments,
+}) {
   return (
     <div className="container mx-auto">
       <Card className="max-w-4xl mx-auto mt-4 bg-white rounded-xl shadow-md overflow-hidden md:flex dark:bg-gray-800">
@@ -31,6 +44,9 @@ export function Movie({ title, description, release_date, country, genre, durati
               <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
                 Number of Ratings: {reviewNumber}
               </p>
+            </div>
+            <div className="mt-2 mb-2 flex items-center">
+              <FavouriteButton movieId={movieId} />
             </div>
           </div>
           <div>
