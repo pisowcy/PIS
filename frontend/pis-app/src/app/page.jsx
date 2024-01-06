@@ -5,6 +5,7 @@ import { Navbar } from "@/components/navbar";
 import Link from "next/link";
 import { useFetchMovies, fetchMovieRating } from "./dataprocessing";
 import { useState, useEffect } from "react";
+import { StarIcon } from "@/components/staricon";
 
 export default function HomePage() {
   return (
@@ -63,20 +64,24 @@ function Movie({ id, title, description, rating }) {
     <Card>
       <Link href={`/movie-page/${id}`}>
         <CardHeader>
-          <h3 className="text-lg font-bold text-black">{title}</h3>
-          <Badge className="text-black">{rating}</Badge>
+          <div className="flex justify-between items-center">
+            <h3 className="text-lg font-bold text-black">{title}</h3>
+            <div className="flex items-center">
+              <StarIcon className="w-4 h-4 inline-block mr-1" />
+              <span className="text-lg">{rating}</span>
+            </div>
+          </div>
         </CardHeader>
+
         <CardContent>
           <img
             alt="Movie poster"
-            className="w-full h-64 object-cover"
-            height="200"
+            className="w-full object-cover"
             src="https://pisstorage2.blob.core.windows.net/static/poster_example.jpg"
             style={{
-              aspectRatio: "200/200",
+              aspectRatio: "27 / 40",
               objectFit: "cover",
             }}
-            width="200"
           />
           <p className="mt-4 text-black">{description}</p>
         </CardContent>
@@ -93,7 +98,8 @@ function MovieCards() {
     const fetchRatings = async () => {
       const ratingsData = {};
       for (const movie of movies) {
-        ratingsData[movie.id] = await fetchMovieRating(1); //should be movie.id
+        const rating = await fetchMovieRating(movie.id);
+        ratingsData[movie.id] = Number(rating).toFixed(2);
       }
       setRatings(ratingsData);
     };
@@ -105,7 +111,7 @@ function MovieCards() {
 
   return (
     <section className="px-6 py-12">
-      <h2 className="text-2xl font-bold text-black mb-6">Trending Movies</h2>
+      <h2 className="text-2xl font-bold text-black mb-6">Explore Movies</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
         {movies.map((movie) => (
           <Movie
@@ -113,7 +119,7 @@ function MovieCards() {
             id={movie.id}
             title={movie.title}
             description={movie.description}
-            rating={ratings[movie.id]} // Use the fetched rating here
+            rating={ratings[movie.id]}
           />
         ))}
       </div>

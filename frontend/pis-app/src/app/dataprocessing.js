@@ -42,12 +42,12 @@ export function useFetchMovies() {
 
 export async function fetchMovieRating(movieId) {
   try {
-    const response = await fetch(`http://20.229.152.181/reviews/${movieId}`);
+    const response = await fetch(`http://20.229.152.181/reviewsByProductionStats/${movieId}`);
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    return data.review; // Assuming the endpoint returns an object with a 'rating' field
+    return Number(data.average_score);
   } catch (error) {
     console.error("Error fetching movie rating:", error);
   }
