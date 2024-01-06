@@ -15,6 +15,7 @@ export default function ProductionDetails({ params }) {
   const [reviewAverage, setReviewAverage] = useState(0);
   const [reviewNumber, setReviewNumber] = useState(0);
   const [comments, setComments] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -86,6 +87,8 @@ export default function ProductionDetails({ params }) {
         setMovie(movieData);
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -96,19 +99,23 @@ export default function ProductionDetails({ params }) {
   return (
     <main>
       <Navbar />
-      <Movie
-        title={movie.title}
-        description={movie.description}
-        release_date={movie.premiere_date}
-        country={movie.country}
-        genre={movie.genre}
-        duration={movie.duration}
-        reviewNumber={reviewNumber}
-        reviewAverage={reviewAverage}
-        actors={actors}
-        movieId={params.movieId}
-        comments={comments}
-      />
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <Movie
+          title={movie.title}
+          description={movie.description}
+          release_date={movie.premiere_date}
+          country={movie.country}
+          genre={movie.genre}
+          duration={movie.duration}
+          reviewNumber={reviewNumber}
+          reviewAverage={reviewAverage}
+          actors={actors}
+          movieId={params.movieId}
+          comments={comments}
+        />
+      )}
     </main>
   );
 }

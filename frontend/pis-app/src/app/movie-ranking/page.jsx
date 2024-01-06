@@ -25,6 +25,7 @@ export default function MovieRanking() {
 
 function Ranking() {
   const [productions, setProductions] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -78,6 +79,8 @@ function Ranking() {
 
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false)
       }
     };
 
@@ -86,7 +89,9 @@ function Ranking() {
 
   return (
     <div className="flex flex-col gap-6">
-      {
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
         productions.map((production, index) => {
           var dateString = production.premiere_date
           var date = new Date(dateString)
@@ -99,10 +104,10 @@ function Ranking() {
             genre={production.genre}
             year={year}
             review={production.average_score}
-            number={index+1}
+            number={index + 1}
           />
         })
-      }
+      )}
     </div>
   )
 }
