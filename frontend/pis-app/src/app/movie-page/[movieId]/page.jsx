@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { Navbar } from "@/components/navbar";
 import { Rating } from "@mui/material";
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar";
 import { StarIcon } from "@/components/icons";
+import Fab from "@mui/material/Fab";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 
 export default function ProductionDetails({ params }) {
   const [movie, setMovie] = useState({});
@@ -91,8 +93,6 @@ export default function ProductionDetails({ params }) {
 
     fetchMovies();
   }, []);
-
-  console.log(movie);
   return (
     <Movie
       title={movie.title}
@@ -107,6 +107,88 @@ export default function ProductionDetails({ params }) {
       movieId={params.movieId}
       comments={comments}
     />
+  );
+}
+
+function FavouriteButton(movieId) {
+  const [isFavorite, setIsFavorite] = useState(false);
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+  const fetchFavorites = async () => {
+    try {
+      const response = await fetch(
+        `http://20.229.152.181/favoriteUserProductionByUser/1`
+      );
+      const favorites = await response.json();
+      const isFav = favorites.some(
+        (fav) => fav.production === +movieId.movieId
+      );
+      console.log(isFav, movieId);
+      setIsFavorite(isFav);
+    } catch (error) {
+      console.error("Error fetching favorites:", error);
+    }
+  };
+  const addToFavorites = async () => {
+    try {
+      const response = await fetch(
+        `http://20.229.152.181/favoriteUserProduction`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user: 1, production: movieId }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setIsFavorite(true);
+    } catch (error) {
+      console.error("Error adding to favorites:", error);
+    }
+  };
+  const removeFromFavorites = async () => {
+    try {
+      const response = await fetch(
+        `http://20.229.152.181/favoriteUserProduction`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ user: 1, production: movieId }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setIsFavorite(false);
+    } catch (error) {
+      console.error("Error removing from favorites:", error);
+    }
+  };
+
+  const toggleFavorite = () => {
+    if (isFavorite) {
+      removeFromFavorites();
+    } else {
+      addToFavorites();
+    }
+  };
+  return (
+    <button
+      className="w-1/2 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded mx-auto"
+      onClick={toggleFavorite}
+    >
+      {isFavorite ? "Remove ♥" : "Add ♡"}
+    </button>
   );
 }
 
@@ -151,6 +233,9 @@ function Movie(props) {
                 <p className="text-base leading-6 text-gray-500 dark:text-gray-300">
                   Number of Ratings: {reviewNumber}
                 </p>
+              </div>
+              <div className="mt-2 mb-2 flex items-center">
+                <FavouriteButton movieId={movieId} />
               </div>
             </div>
             <div>
