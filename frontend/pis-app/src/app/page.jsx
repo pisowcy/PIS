@@ -18,15 +18,15 @@ export default function HomePage() {
 
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
-    const url = "http://20.229.152.181:9200/actor/_search";
+    const url = "http://20.229.152.181:9200/production/_search";
     const requestData = {
       query: {
-        match_phrase_prefix: {
-          name: {
-            query: searchTerm,
-            slop: 3,
-            max_expansions: 10,
-          },
+        multi_match: {
+          query: searchTerm,
+          type: "phrase_prefix",
+          fields: ["description", "title", "country", "genre"],
+          slop: 3,
+          max_expansions: 10,
         },
       },
     };
@@ -42,7 +42,7 @@ export default function HomePage() {
 
     try {
       const response = await axios.post(url, requestData, config);
-      setData(response.data);
+      setData(response.data.hits.hits);
     } catch (error) {
       console.error("Error fetching data: ", error);
     }
@@ -76,16 +76,21 @@ export default function HomePage() {
               <p className="text-lg text-white mt-2">
                 Explore and rate your favourite productions
               </p>
-              <div className="mt-4">
-                <form onSubmit={handleSearchSubmit}>
+              <div className="mt-4 relative">
+                <form onSubmit={handleSearchSubmit} className="flex">
                   <input
-                    className="w-64 py-2 px-4 rounded-md text-black"
+                    className="w-full py-2 px-4 rounded-l-md text-black"
                     placeholder="Search for a movie"
                     type="text"
                     value={searchTerm}
                     onChange={handleSearchChange}
                   />
-                  <button type="submit">Search</button>
+                  <button
+                    type="submit"
+                    className="bg-white hover:bg-blue-500 text-white py-2 px-4 rounded-r-md"
+                  >
+                    🔎
+                  </button>
                 </form>
               </div>
             </div>
@@ -105,7 +110,8 @@ export default function HomePage() {
   );
 }
 
-function Movie({ id, title, description, rating }) {
+function Movie({ id, title, description, rating, poster_url }) {
+  console.log(poster_url);
   return (
     <Card>
       <Link href={`/movie-page/${id}`}>
@@ -123,7 +129,7 @@ function Movie({ id, title, description, rating }) {
           <img
             alt="Movie poster"
             className="w-full object-cover"
-            src="https://pisstorage2.blob.core.windows.net/static/poster_example.jpg"
+            src={poster_url}
             style={{
               aspectRatio: "27 / 40",
               objectFit: "cover",
@@ -166,6 +172,7 @@ function MovieCards() {
             title={movie.title}
             description={movie.description}
             rating={ratings[movie.id]}
+            poster_url={movie.poster_url}
           />
         ))}
       </div>
