@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { LoadingAnimation } from "@/components/loadinganimation";
 import { MovieCards } from "@/components/search/moviecards";
 import { SearchForm } from "@/components/search/searchform";
+import { Navbar } from "@/components/navbar";
 
 export default function Component({ params }) {
     const [data, setData] = useState([]);
@@ -48,15 +49,18 @@ export default function Component({ params }) {
     }, []);
 
     return (
-        <div className="flex flex-col gap-6 p-4 md:p-6">
-            <SearchForm query={params.query} />
-            {isLoading ? (
-                <LoadingAnimation />
-            ) : data.length > 0 ? (
-                <MovieCards movies={data}/>
-            ) : (
-                <p>No results for this query</p>
-            )}
-        </div>
+        <>
+          <Navbar />
+          <div className="flex flex-col gap-6 p-4 md:p-6">
+              <SearchForm query={params.query} />
+              {isLoading ? (
+                  <LoadingAnimation />
+              ) : data.length > 0 ? (
+                  <MovieCards movies={data}/>
+              ) : (
+                  <p>No results for this query</p>
+              )}
+          </div>
+        </>
     );
 }
