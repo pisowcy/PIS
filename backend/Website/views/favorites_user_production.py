@@ -10,6 +10,12 @@ class FUPList(generics.ListCreateAPIView):
     serializer_class = FUPSerializer
 
 
+class FUPDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'id'
+    queryset = FavoritesUserProduction.objects.all()
+    serializer_class = FUPSerializer
+
+
 class FUPByProduction(generics.ListCreateAPIView):
     queryset = FavoritesUserProduction.objects.all()
     serializer_class = FUPSerializer

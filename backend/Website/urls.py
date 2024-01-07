@@ -5,11 +5,11 @@ from .views.user import UserList, UserDetail
 from .views.review import ReviewList, ReviewDetail, ReviewByProduction, ReviewByProductionStats
 from .views.production import ProductionList, ProductionDetail, ProductionByActor
 from .views.actor import ActorList, ActorDetail, ActorByProduction
-from .views.to_watch import ToWatchList, ToWatchByProduction, ToWatchByUser
-from .views.favorites_user_production import FUPList, FUPByProduction, FUPByUser
-from .views.actor_production import ActorProductionList, ActorProductionByProduction, ActorProductionByActor
-from .views.country import CountryList
-from .views.genre import GenreList
+from .views.to_watch import ToWatchList, ToWatchDetail, ToWatchByProduction, ToWatchByUser
+from .views.favorites_user_production import FUPList, FUPDetail, FUPByProduction, FUPByUser
+from .views.actor_production import ActorProductionList, ActorProductionDetail, ActorProductionByProduction, ActorProductionByActor
+from .views.country import CountryList, CountryDetail
+from .views.genre import GenreList, GenreDetail
 
 
 urlpatterns = [
@@ -34,18 +34,23 @@ urlpatterns = [
     path('actorsByProduction/<int:id>', ActorByProduction.as_view(), name="actor-by-production-list"),
 
     path('toWatch', ToWatchList.as_view(), name="to-watch-list"),
+    path('toWatch/<int:id>', ToWatchDetail.as_view(), name="to-watch-detail"),
     path('toWatchByProduction/<int:id>', ToWatchByProduction.as_view(), name="to-watch-by-production-list"),
     path('toWatchByUser/<int:id>', ToWatchByUser.as_view(), name="to-watch-by-user-list"),
 
     path('favoriteUserProduction', FUPList.as_view(), name="fup-list"),
+    path('favoriteUserProduction/<int:id>', FUPDetail.as_view(), name="fup-detail"),
     path('favoriteUserProductionByProduction/<int:id>', FUPByProduction.as_view(), name="fup-by-production-list"),
     path('favoriteUserProductionByUser/<int:id>', FUPByUser.as_view(), name="fup-by-user-list"),
 
-    path('actorProduction', ActorProductionList.as_view(), name="fup-list"),
-    path('actorProductionByProduction/<int:id>', ActorProductionByProduction.as_view(), name="fup-by-production-list"),
-    path('actorProductionByActor/<int:id>', ActorProductionByActor.as_view(), name="fup-by-user-list"),
+    path('actorProduction', ActorProductionList.as_view(), name="actor-production-list"),
+    path('actorProduction/<int:id>', ActorProductionDetail.as_view(), name="actor-production-detail"),
+    path('actorProductionByProduction/<int:id>', ActorProductionByProduction.as_view(), name="actor-production-by-production-list"),
+    path('actorProductionByActor/<int:id>', ActorProductionByActor.as_view(), name="actor-production-by-user-list"),
 
     path('country', CountryList.as_view(), name="country-list"),
+    path('country/<int:id>', CountryDetail.as_view(), name="country-detail"),
 
     path('genre', GenreList.as_view(), name="genre-list"),
+    path('genre/<int:id>', GenreDetail.as_view(), name="genre-detail"),
 ]

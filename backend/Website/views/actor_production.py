@@ -10,6 +10,12 @@ class ActorProductionList(generics.ListCreateAPIView):
     serializer_class = ActorProductionSerializer
 
 
+class ActorProductionDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'id'
+    queryset = ActorProduction.objects.all()
+    serializer_class = ActorProductionSerializer
+
+
 class ActorProductionByProduction(generics.ListCreateAPIView):
     queryset = ActorProduction.objects.all()
     serializer_class = ActorProductionSerializer

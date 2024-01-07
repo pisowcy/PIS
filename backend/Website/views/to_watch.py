@@ -10,6 +10,12 @@ class ToWatchList(generics.ListCreateAPIView):
     serializer_class = ToWatchSerializer
 
 
+class ToWatchDetail(generics.RetrieveUpdateDestroyAPIView):
+    lookup_field = 'id'
+    queryset = ToWatch.objects.all()
+    serializer_class = ToWatchSerializer
+
+
 class ToWatchByProduction(generics.ListCreateAPIView):
     queryset = ToWatch.objects.all()
     serializer_class = ToWatchSerializer
