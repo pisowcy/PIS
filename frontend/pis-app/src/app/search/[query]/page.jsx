@@ -1,13 +1,13 @@
 "use client";
 import axios from "axios";
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { LoadingAnimation } from "@/components/loadinganimation";
+import { MovieCards } from "@/components/search/moviecards";
+import { SearchForm } from "@/components/search/searchform";
 
 export default function Component({ params }) {
     const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -39,6 +39,8 @@ export default function Component({ params }) {
           setData(movies);
         } catch (error) {
           console.error("Error fetching data: ", error);
+        } finally {
+            setIsLoading(false);
         }
       };
   
@@ -47,62 +49,14 @@ export default function Component({ params }) {
 
     return (
         <div className="flex flex-col gap-6 p-4 md:p-6">
-            <SearchInput />
-            <MovieCards movies={data}/>
+            <SearchForm query={params.query} />
+            {isLoading ? (
+                <LoadingAnimation />
+            ) : data.length > 0 ? (
+                <MovieCards movies={data}/>
+            ) : (
+                <p>No results for this query</p>
+            )}
         </div>
     );
-}
-
-function SearchInput() {
-    return (
-        <div className="flex items-center gap-4">
-            <Input className="flex-grow" placeholder="Search for films..." />
-            <Button>Search</Button>
-        </div>
-    )
-}
-
-function MovieCards({ movies }) {
-    return (
-        <>
-            {
-                movies.map((movie) => {
-                    return <MovieCard
-                        key={movie.id}
-                        id={movie.id}
-                        title={movie.title}
-                        premiere_date={movie.premiere_date}
-                        genre={movie.genre}
-                        duration={movie.duration}
-                        description={movie.description}
-                    />
-                })
-            }
-        </>
-    )
-}
-
-function MovieCard({
-    id,
-    title,
-    premiere_date,
-    genre,
-    duration,
-    description
-}) {
-    return (
-        <Link href={`/movie-page/${id}`}>
-            <Card>
-                <CardHeader>
-                    <CardTitle>{title}</CardTitle>
-                    <CardDescription>Release Date: {premiere_date}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <p>Genre: {genre}</p>
-                    <p>Runtime: {duration} minutes</p>
-                    <p>{description}</p>
-                </CardContent>
-            </Card>
-        </Link>
-    )
 }
