@@ -1,61 +1,33 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { CardHeader, CardContent, Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import Link from "next/link";
 import { useFetchMovies, fetchMovieRating } from "./dataprocessing";
 import { useState, useEffect } from "react";
 import { StarIcon } from "@/components/staricon";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-  const [data, setData] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const router = useRouter();
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
+    console.log(searchTerm)
   };
 
   const handleSearchSubmit = async (event) => {
     event.preventDefault();
-    const url = "http://20.229.152.181:9200/production/_search";
-    const requestData = {
-      query: {
-        multi_match: {
-          query: searchTerm,
-          type: "phrase_prefix",
-          fields: ["description", "title", "country", "genre"],
-          slop: 3,
-          max_expansions: 10,
-        },
-      },
-    };
-    const config = {
-      auth: {
-        username: "admin",
-        password: "admin",
-      },
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-
-    try {
-      const response = await axios.post(url, requestData, config);
-      setData(response.data.hits.hits);
-    } catch (error) {
-      console.error("Error fetching data: ", error);
-    }
+    router.push(`/search/${searchTerm}`);
   };
 
   return (
-    <div
+    <main
       className="flex flex-col min-h-screen bg-gray-100"
       data-testid="home-page"
     >
       <Navbar />
-      {data ? <pre>{JSON.stringify(data, null, 2)}</pre> : <p>No data</p>}
-      <main className="flex-1">
+      <div className="flex-1">
         <section className="relative w-full h-96">
           <img
             alt="Cinematic background"
@@ -97,7 +69,7 @@ export default function HomePage() {
           </div>
         </section>
         <MovieCards />
-      </main>
+      </div>
       <footer className="py-4 px-6 bg-white shadow-t">
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
@@ -106,7 +78,7 @@ export default function HomePage() {
           <nav className="flex gap-4"></nav>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
 
