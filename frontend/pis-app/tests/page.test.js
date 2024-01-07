@@ -1,15 +1,15 @@
-import '@testing-library/jest-dom'
-import { render, screen } from '@testing-library/react'
-import Page from '../src/app/page'
+import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import { Footer } from '@/components/main-page/footer';
 
-describe('Page', () => {
-  it('renders HomePage', () => {
-    render(<Page />)
+describe('Footer', () => {
+  it('renders Footer', () => {
+    render(<Footer />);
 
-    const homePage = screen.getByTestId('home-page')
-    expect(homePage).toBeInTheDocument()
+    const footer = screen.getByRole('contentinfo');
+    expect(footer).toBeInTheDocument();
 
-    const heading = screen.getByRole('heading', { level: 1 })
-    expect(heading).toBeInTheDocument()
-  })
-})
+    const copyrightText = screen.getByText(/© Cinemania\. Projekt na przedmiot PIS\./i);
+    expect(copyrightText).toBeInTheDocument();
+  });
+});
