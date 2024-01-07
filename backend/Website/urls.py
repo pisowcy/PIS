@@ -42,8 +42,8 @@ urlpatterns = [
     path('favoriteUserProduction/<int:id>', FUPDetail.as_view(), name="fup-detail"),
     path('favoriteUserProductionByProduction/<int:id>', FUPByProduction.as_view(), name="fup-by-production-list"),
     path('favoriteUserProductionByUser/<int:id>', FUPByUser.as_view(), name="fup-by-user-list"),
-    path('favoriteUserProduction/user/<int:user_id>/production/<int:production_id>/', FUPByUserAndProduction.as_view(), name='delete_fup'),
-    path('favoriteUserProduction/production/<int:production_id>/user/<int:user_id>/', FUPByUserAndProduction.as_view(), name='delete_fup'),
+    path('favoriteUserProduction/user/<int:user_id>/production/<int:production_id>/', FUPByUserAndProduction.as_view(), name='fup-detail'),
+    path('favoriteUserProduction/production/<int:production_id>/user/<int:user_id>/', FUPByUserAndProduction.as_view(), name='fup-detail'),
 
     path('actorProduction', ActorProductionList.as_view(), name="actor-production-list"),
     path('actorProduction/<int:id>', ActorProductionDetail.as_view(), name="actor-production-detail"),
