@@ -1,6 +1,6 @@
 import { NoContentPage } from "@/components/nocontentpage";
 
-export default function MoviePage() {
+export default function UserPage() {
   return (
     <NoContentPage />
   );
