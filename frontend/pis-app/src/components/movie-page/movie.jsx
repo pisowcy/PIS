@@ -91,9 +91,9 @@ export function Movie({
                   width="560"
                   height="315"
                   src="https://www.youtube.com/embed/5PSNL1qE6VY?si=nC9NgXPFx3IS3ETO"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="autoplay; encrypted-media"
-                  allowfullscreen
+                  allowFullScreen
                 ></iframe>
               </div>
             </CardContent>
