@@ -6,7 +6,7 @@ from .views.review import ReviewList, ReviewDetail, ReviewByProduction, ReviewBy
 from .views.production import ProductionList, ProductionDetail, ProductionByActor
 from .views.actor import ActorList, ActorDetail, ActorByProduction
 from .views.to_watch import ToWatchList, ToWatchDetail, ToWatchByProduction, ToWatchByUser
-from .views.favorites_user_production import FUPList, FUPDetail, FUPByProduction, FUPByUser
+from .views.favorites_user_production import FUPList, FUPDetail, FUPByProduction, FUPByUser, FUPByUserAndProduction
 from .views.actor_production import ActorProductionList, ActorProductionDetail, ActorProductionByProduction, ActorProductionByActor
 from .views.country import CountryList, CountryDetail
 from .views.genre import GenreList, GenreDetail
@@ -42,6 +42,8 @@ urlpatterns = [
     path('favoriteUserProduction/<int:id>', FUPDetail.as_view(), name="fup-detail"),
     path('favoriteUserProductionByProduction/<int:id>', FUPByProduction.as_view(), name="fup-by-production-list"),
     path('favoriteUserProductionByUser/<int:id>', FUPByUser.as_view(), name="fup-by-user-list"),
+    path('favoriteUserProduction/user/<int:user_id>/production/<int:production_id>/', FUPByUserAndProduction.as_view(), name='delete_fup'),
+    path('favoriteUserProduction/production/<int:production_id>/user/<int:user_id>/', FUPByUserAndProduction.as_view(), name='delete_fup'),
 
     path('actorProduction', ActorProductionList.as_view(), name="actor-production-list"),
     path('actorProduction/<int:id>', ActorProductionDetail.as_view(), name="actor-production-detail"),
