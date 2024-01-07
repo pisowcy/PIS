@@ -14,7 +14,7 @@ export function FavouriteButton(movieId) {
       const isFav = favorites.some(
         (fav) => fav.production === +movieId.movieId
       );
-      console.log(isFav, movieId);
+      console.log(isFav, +movieId.movieId);
       setIsFavorite(isFav);
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -29,7 +29,7 @@ export function FavouriteButton(movieId) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user: 1, production: movieId }),
+          body: JSON.stringify({ user: 1, production: movieId.movieId }),
         }
       );
 

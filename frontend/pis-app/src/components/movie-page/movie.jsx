@@ -17,6 +17,8 @@ export function Movie({
   actors,
   movieId,
   comments,
+  poster_url,
+  trailer_url,
 }) {
   return (
     <div className="container mx-auto">
@@ -27,7 +29,7 @@ export function Movie({
               alt="Movie 3 poster"
               className="w-56 h-80 object-cover rounded-md"
               height="600"
-              src="/poster-example.jpg"
+              src={poster_url}
               style={{
                 aspectRatio: "140/200",
                 objectFit: "cover",
@@ -81,6 +83,18 @@ export function Movie({
                     })}
                   </ul>
                 </div>
+                <video width="320" height="240" controls>
+                  <source src={trailer_url} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/5PSNL1qE6VY?si=nC9NgXPFx3IS3ETO"
+                  frameborder="0"
+                  allow="autoplay; encrypted-media"
+                  allowfullscreen
+                ></iframe>
               </div>
             </CardContent>
           </div>

@@ -92,30 +92,31 @@ export default function Page({ params }) {
     fetchMovies();
   }, []);
 
-  console.log(movie);
   return (
-      <main>
+    <main>
       <Navbar />
       {loadingError ? (
-        alert(`There is a problem with Your internet connection\nCheck it and try again`)
-      ) : (
-        isLoading ? (
-          <LoadingAnimation />
-        ) : (
-          <Movie
-            title={movie.title}
-            description={movie.description}
-            release_date={movie.premiere_date}
-            country={movie.country}
-            genre={movie.genre}
-            duration={movie.duration}
-            reviewNumber={reviewNumber}
-            reviewAverage={reviewAverage}
-            actors={actors}
-            movieId={params.movieId}
-            comments={comments}
-          />
+        alert(
+          `There is a problem with Your internet connection\nCheck it and try again`
         )
+      ) : isLoading ? (
+        <LoadingAnimation />
+      ) : (
+        <Movie
+          title={movie.title}
+          description={movie.description}
+          release_date={movie.premiere_date}
+          country={movie.country}
+          genre={movie.genre}
+          duration={movie.duration}
+          reviewNumber={reviewNumber}
+          reviewAverage={reviewAverage}
+          actors={actors}
+          movieId={params.movieId}
+          comments={comments}
+          poster_url={movie.poster_url}
+          trailer_url={movie.trailer_url}
+        />
       )}
     </main>
   );
