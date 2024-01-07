@@ -1,14 +1,17 @@
 import Link from "next/link"
 import { StarIcon } from "../staricon"
 
-export function Movie(props) {
-    const description = props.description
-    const title = props.title
-    const genre = props.genre
-    const year = props.year
-    const review = props.review
-    const number = props.number
-    const id = props.id
+export function Movie({
+  id,
+  description,
+  title,
+  genre,
+  year,
+  review,
+  poster_url,
+  number,
+}) {
+  console.log(poster_url);
     return (
       <Link href={`/movie-page/${id}`}>
         <div className="flex gap-4">
@@ -17,7 +20,7 @@ export function Movie(props) {
             alt="Movie 1 poster"
             className="w-28 h-40 object-cover rounded-md"
             height="200"
-            src="/poster-example.jpg"
+            src={poster_url}
             style={{
               aspectRatio: "140/200",
               objectFit: "cover",

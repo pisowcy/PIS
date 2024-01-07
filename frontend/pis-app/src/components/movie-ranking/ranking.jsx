@@ -51,6 +51,7 @@ export function Ranking() {
                 premiere_date: production.premiere_date,
                 country: production.country,
                 genre: production.genre,
+                poster_url: production.poster_url,
                 average_score: productionsAverageScore[production.id]
             }
           })
@@ -88,6 +89,7 @@ export function Ranking() {
                 genre={production.genre}
                 year={year}
                 review={production.average_score}
+                poster_url={production.poster_url}
                 number={index + 1}
               />
             );
