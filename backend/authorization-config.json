@@ -1,0 +1,109 @@
+{
+  "allowRemoteResourceManagement": true,
+  "policyEnforcementMode": "ENFORCING",
+  "resources": [
+    {
+      "name": "Default Resource",
+      "type": "urn:PIS-backend:resources:default",
+      "ownerManagedAccess": false,
+      "attributes": {},
+      "_id": "4415186a-4c25-4093-901a-dded7c91e730",
+      "uris": [
+        "/*"
+      ]
+    }
+  ],
+  "policies": [
+    {
+      "id": "8eaffcfa-e829-4033-afcc-b27ffac6bf6b",
+      "name": "Default Policy",
+      "description": "A policy that grants access only for users within this realm",
+      "type": "js",
+      "logic": "POSITIVE",
+      "decisionStrategy": "AFFIRMATIVE",
+      "config": {
+        "code": "// by default, grants any permission associated with this policy\n$evaluation.grant();\n"
+      }
+    },
+    {
+      "id": "76d13963-545c-475d-ba34-f88125e1bc9d",
+      "name": "super-user-policy",
+      "description": "Allow users with super-user role",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"PIS-backend/super-user\",\"required\":true}]"
+      }
+    },
+    {
+      "id": "c9137977-74f0-453c-b802-31b8b12e3c88",
+      "name": "normal-user-policy",
+      "type": "role",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "roles": "[{\"id\":\"PIS-backend/normal-user\",\"required\":false}]"
+      }
+    },
+    {
+      "id": "129f5a74-dca6-4d86-b80f-6f26174583be",
+      "name": "Default Permission",
+      "description": "A permission that applies to the default resource type",
+      "type": "resource",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "defaultResourceType": "urn:PIS-backend:resources:default",
+        "applyPolicies": "[\"Default Policy\"]"
+      }
+    },
+    {
+      "id": "a3abf5c8-45d4-4dac-b6ab-ce240f766fd8",
+      "name": "full-access",
+      "description": "Allow full acess if conditions met",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "scopes": "[\"review:add\",\"review:view\",\"review:delete\",\"review:update\"]",
+        "applyPolicies": "[\"super-user-policy\"]"
+      }
+    },
+    {
+      "id": "93cf317d-ceaa-4f26-ad06-8fc2060070ca",
+      "name": "read-only-access",
+      "description": "Read only if conditions met",
+      "type": "scope",
+      "logic": "POSITIVE",
+      "decisionStrategy": "UNANIMOUS",
+      "config": {
+        "scopes": "[\"review:view\"]",
+        "applyPolicies": "[\"normal-user-policy\"]"
+      }
+    }
+  ],
+  "scopes": [
+    {
+      "id": "1799e146-12dd-4e29-9810-cf42705e2f3b",
+      "name": "review:update",
+      "displayName": "review update"
+    },
+    {
+      "id": "0a057ab3-6764-4edd-a384-260a85bf549a",
+      "name": "review:add",
+      "displayName": "review add"
+    },
+    {
+      "id": "8b54b228-03d2-4c8b-91dd-04eca3746a92",
+      "name": "review:view",
+      "displayName": "review view"
+    },
+    {
+      "id": "84453beb-0b8e-427e-be5e-a9824783711a",
+      "name": "review:delete",
+      "displayName": "review delete"
+    }
+  ],
+  "decisionStrategy": "UNANIMOUS"
+}

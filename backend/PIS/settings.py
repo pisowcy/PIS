@@ -14,6 +14,7 @@ from pathlib import Path
 import django
 from django.utils.encoding import smart_str
 import environ
+import os
 # Initialise environment variables
 env = environ.Env()
 environ.Env.read_env()
@@ -34,6 +35,25 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['20.229.152.181', '137.116.206.131', '10.1.1.4', '127.0.0.1']
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Keycloak settings
+KEYCLOAK_BEARER_AUTHENTICATION_EXEMPT_PATHS = [
+    'admin', 'accounts',
+    ]
+CONFIG_DIR = os.path.join(os.path.dirname(__file__),os.pardir)
+KEYCLOAK_CLIENT_PUBLIC_KEY = """-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAiRxmCgdVSTUb2AUoIkdWixbPFrl+eLFLO6pmn4jyKxPDBnf7X8uc3dlT1Ou5LhEh9LxvXB+RkgQqPf6xqPMLb7OvMKb06SSGV25PHGcRuKeoQR8oIr+zp/nK44jl9ombEqjLIe13WEMjeZ9E66OY643/OJIr3XEr8fh3dMrp6zqmDeZaMSfoPhNeLqqsw0YqvM+bn7MpyLut/ApM1E1w8Ipmc9vaIoS65Ya/EkoPmpAz7N5x/E5uzMN59SQ3UU0A3Bamyf3thmvHCDOIaTadaR1OroLUL1YNwQ8BmbsfcDTbt/udjJgQosgU1hh1C3Rt1AHqly37Vb7ousOatP5RSwIDAQAB
+-----END PUBLIC KEY-----"""
+KEYCLOAK_CONFIG = {
+    'KEYCLOAK_REALM': 'PIS',
+    'KEYCLOAK_CLIENT_ID': 'PIS-backend',
+    'KEYCLOAK_DEFAULT_ACCESS': 'ALLOW',  # DENY or ALLOW
+    'KEYCLOAK_AUTHORIZATION_CONFIG': os.path.join(CONFIG_DIR, 'authorization-config.json'),
+    'KEYCLOAK_METHOD_VALIDATE_TOKEN': 'DECODE',
+    'KEYCLOAK_SERVER_URL': 'https://keycloackpis.azurewebsites.net/auth/',
+    'KEYCLOAK_CLIENT_SECRET_KEY': 'mlUG6DrNBXF6q4o5z98dwwoxy2CMCzms',
+    'KEYCLOAK_CLIENT_PUBLIC_KEY': KEYCLOAK_CLIENT_PUBLIC_KEY,
+}
 
 # Application definition
 
@@ -60,6 +80,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'Website.middleware.KeycloakMiddleware',
 ]
 
 ROOT_URLCONF = 'PIS.urls'
@@ -100,7 +121,7 @@ JENKINS_TASKS = (
     "django_jenkins.tasks.run_pylint",
     "django_jenkins.tasks.run_pep8",
 )
-import os
+
 PYLINT_RCFILE = os.path.join(BASE_DIR, ".pylintrc")
 PEP8_RCFILE = os.path.join(BASE_DIR, "setup.cfg")
 PROJECT_APPS = ['Website']
