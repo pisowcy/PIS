@@ -18,8 +18,9 @@ export function SearchForm({ query }) {
     }
 
     return (
-        <div className="flex items-center gap-4">
-            <form onSubmit={handleSearchSubmit}>
+        // <div className="flex items-center gap-4">
+        <div>
+            <form onSubmit={handleSearchSubmit} className="flex items-center gap-4">
                 <Input className="flex-grow" placeholder={query} onChange={handleSearchChange} />
                 <Button>Search</Button>
             </form>
