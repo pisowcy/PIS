@@ -83,18 +83,13 @@ export function Movie({
                     })}
                   </ul>
                 </div>
-                <video width="320" height="240" controls>
+                <h3 className="text-lg mt-6 leading-6 font-medium text-gray-900 dark:text-white">
+                  Trailer
+                </h3>
+                <video width="560" height="315" controls>
                   <source src={trailer_url} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-                <iframe
-                  width="560"
-                  height="315"
-                  src="https://www.youtube.com/embed/5PSNL1qE6VY?si=nC9NgXPFx3IS3ETO"
-                  frameBorder="0"
-                  allow="autoplay; encrypted-media"
-                  allowFullScreen
-                ></iframe>
               </div>
             </CardContent>
           </div>
