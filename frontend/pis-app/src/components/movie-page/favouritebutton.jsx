@@ -45,13 +45,12 @@ export function FavouriteButton(movieId) {
   const removeFromFavorites = async () => {
     try {
       const response = await fetch(
-        `http://20.229.152.181/favoriteUserProduction`,
+        `http://20.229.152.181/favoriteUserProduction/user/1/production/${+movieId.movieId}`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ user: 1, production: movieId }),
         }
       );
 
