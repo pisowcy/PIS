@@ -14,7 +14,6 @@ export function FavouriteButton(movieId) {
       const isFav = favorites.some(
         (fav) => fav.production === +movieId.movieId
       );
-      console.log(isFav, +movieId.movieId);
       setIsFavorite(isFav);
     } catch (error) {
       console.error("Error fetching favorites:", error);
@@ -45,7 +44,7 @@ export function FavouriteButton(movieId) {
   const removeFromFavorites = async () => {
     try {
       const response = await fetch(
-        `http://20.229.152.181/favoriteUserProduction/user/1/production/${+movieId.movieId}`,
+        `http://20.229.152.181/favoriteUserProduction/user/1/production/${+movieId.movieId}/`,
         {
           method: "DELETE",
           headers: {

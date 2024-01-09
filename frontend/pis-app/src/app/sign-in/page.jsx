@@ -43,7 +43,7 @@ export default function SignIn() {
           </CardContent>
           <CardFooter>
             <Button className="w-full py-2 text-white bg-blue-500 hover:bg-blue-700 rounded">
-              Sign in
+              <Link href="/user-page/1">Sign In</Link>
             </Button>
           </CardFooter>
         </Card>
